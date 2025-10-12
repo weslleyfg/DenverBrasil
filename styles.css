@@ -1,0 +1,249 @@
+/* ---------- RESET E CONFIGURAÇÕES GERAIS ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ---------- HEADER ---------- */
+header {
+  background-color: #222;
+  color: #fff;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 30px;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+header nav a:hover {
+  color: #00c853;
+}
+
+/* ---------- BANNER PRINCIPAL ---------- */
+.main-banner {
+  position: relative;
+  background: url('images/banner1.jpg') center/cover fixed no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  padding: 100px 20px; /* controla o “tamanho visual” do banner */
+  overflow: hidden;
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.banner-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.banner-content p {
+  font-size: 1.2rem;
+}
+
+/* ---------- SEÇÃO DE SERVIÇOS ---------- */
+.servicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 50px 20px;
+  background-color: #fff;
+}
+
+.servico-item {
+  background: #f1f1f1;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.servico-item:hover {
+  background: #00c853;
+  color: #fff;
+  transform: translateY(-5px);
+}
+
+/* ---------- PRODUTOS (FOTOS E VÍDEOS) ---------- */
+.produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 50px 20px;
+}
+
+.produto-item {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.produto-item:hover {
+  transform: scale(1.05);
+}
+
+.produto-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ---------- GALERIA DE IMAGENS ---------- */
+.images-container {
+  background: rgba(0,0,0,0.9);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.images-gallery img {
+  max-width: 90%;
+  max-height: 80vh;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  background: #00c853;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: #009624;
+}
+
+/* ---------- FORMULÁRIO DE ORÇAMENTO ---------- */
+.orcamento-section {
+  background: #f1f1f1;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.orcamento-section form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.orcamento-section input,
+.orcamento-section textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.orcamento-section button {
+  background-color: #00c853;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.orcamento-section button:hover {
+  background-color: #009624;
+}
+
+/* ---------- LOCALIZAÇÃO ---------- */
+.localizacao {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.mapa-container iframe {
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 768px) {
+  .banner-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .banner-content p {
+    font-size: 1rem;
+  }
+}
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25d366;
+  color: white;
+  font-size: 28px;
+  padding: 12px 16px;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 3000;
+  transition: 0.3s;
+}
+
+.whatsapp-float:hover {
+  background: #1ebe5d;
+  transform: scale(1.1);
+}

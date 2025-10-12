@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DenverBrasil — Engenharia & Serralheria</title>
+    <meta name="description" content="DenverBrasil — Soluções em pergolados, coberturas, corrimãos e portões. Projeto, fabricação e instalação em BH." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg:#f5f7f6;
+            --muted:#9aa3a0;
+            --text:#163225;
+            --accent:#1fb15a; /* verde */
+            --accent-dark:#158a45;
+            --card:#ffffff;
+            --glass: rgba(255,255,255,0.6);
+            --shadow: 0 8px 30px rgba(5,10,10,0.08);
+            --container: 1150px;
+        }
+
+        *{box-sizing:border-box}
+        html{scroll-behavior: smooth;} /* Scroll suave adicionado */
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+            background:linear-gradient(180deg,#f8faf9,#f5f7f6);
+            color:var(--text);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            line-height:1.5;
+        }
+
+        /* Novo estilo para o botão de fechar do modal */
+        .close-btn{
+            background:rgba(255,255,255,0.2);
+            color:white;
+            padding:10px 18px;
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:10px;
+            font-weight:700;
+            cursor:pointer;
+            backdrop-filter: blur(4px);
+        }
+        .close-btn:hover{background:rgba(255,255,255,0.3)}
+
+        /* CONTAINER */
+        .container{
+            width:90%;
+            max-width:var(--container);
+            margin:0 auto;
+        }
+
+        /* HEADER */
+        header{
+            position:sticky;
+            top:0;
+            z-index:1200;
+            background:linear-gradient(90deg, var(--glass), rgba(255,255,255,0.45));
+            backdrop-filter: blur(6px);
+            border-bottom:1px solid rgba(10,10,10,0.04);
+        }
+        .nav{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px;
+            padding:14px 0;
+        }
+        .brand{
+            display:flex;
+            gap:14px;
+            align-items:center;
+            text-decoration:none;
+            color:var(--text);
+        }
+        .logo-mark{
+            width:44px;height:44px;border-radius:8px;
+            background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+            display:flex;align-items:center;justify-content:center;color:white;font-weight:800;
+            box-shadow:0 6px 18px rgba(31,177,90,0.18);
+            font-size:18px;
+        }
+        .brand h1{font-size:18px;margin:0;font-weight:700}
+        
+        /* MENU Desktop - visível por padrão */
+        .main-menu{display:flex;gap:20px;align-items:center;list-style:none;margin:0;padding:0}
+        .main-menu a{color:var(--text);text-decoration:none;font-weight:600;font-size:14px;opacity:.95}
+        .menu-toggle{display:none;font-size:24px;background:none;border:none;cursor:pointer}
+        .cta-header{
+            background:var(--accent);
+            color:white;
+            padding:10px 14px;border-radius:10px;
+            text-decoration:none;font-weight:700;
+            box-shadow:0 6px 18px rgba(31,177,90,0.18);
+        }
+        .cta-header:hover{background:var(--accent-dark)}
+
+        /* HERO */
+        .hero{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:40px;
+            padding:64px 0;
+        }
+        .hero-left{flex:1;min-width:300px}
+        .hero-right{flex:1;display:flex;align-items:center;justify-content:center}
+        .kicker{
+            display:inline-block;
+            background:rgba(31,177,90,0.12);
+            color:var(--accent);
+            padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;margin-bottom:18px;
+        }
+        .headline{
+            font-size:38px;
+            line-height:1.02;
+            margin:0 0 16px 0;
+            color:#072617;
+            letter-spacing:-0.5px;
+            font-weight:800;
+        }
+        .headline .typed{
+            color:var(--accent);
+            white-space:nowrap;
+            border-right:2px solid rgba(31,177,90,0.9);
+            padding-right:6px;
+            margin-left:6px;
+        }
+        .sub{
+            color:var(--muted);font-size:16px;margin-bottom:24px;
+        }
+        .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+        .btn-primary{
+            background:linear-gradient(90deg,var(--accent),var(--accent-dark));
+            color:white;padding:14px 18px;border-radius:12px;border:none;font-weight:800;
+            text-decoration:none;display:inline-flex;align-items:center;gap:10px;box-shadow:var(--shadow);
+        }
+        .btn-ghost{
+            background:transparent;border:1px solid rgba(10,10,10,0.06);padding:12px 16px;border-radius:12px;font-weight:700;
+            color:var(--text);
+        }
+
+        /* HERO IMAGE CARD */
+        .hero-card{
+            width:100%;
+            max-width:520px;
+            border-radius:18px;
+            overflow:hidden;
+            position:relative;
+            box-shadow:0 30px 60px rgba(6,12,9,0.12);
+            transition:transform .6s cubic-bezier(.2,.9,.2,1);
+            background:linear-gradient(180deg, #e9f6ee 0%, #ffffff 100%);
+        }
+        .hero-card img{width:100%;height:420px;object-fit:cover;display:block}
+        .hero-card .overlay-cta{
+            position:absolute;left:18px;bottom:18px;background:rgba(255,255,255,0.92);padding:12px 14px;border-radius:10px;
+            display:flex;gap:12px;align-items:center;box-shadow:0 6px 18px rgba(0,0,0,0.08)
+        }
+        .hero-card .overlay-cta button{background:var(--accent);border:none;color:#fff;padding:10px 12px;border-radius:8px;font-weight:700;cursor:pointer}
+        .hero-card:hover{transform:translateY(-8px)}
+
+        /* BENEFÍCIOS */
+        .benefits{
+            display:flex;gap:18px;margin-top:28px;flex-wrap:wrap;
+        }
+        .benefit{
+            background:var(--card);padding:12px 14px;border-radius:10px;border:1px solid rgba(10,10,10,0.04);
+            display:flex;gap:12px;align-items:center;
+        }
+        .benefit svg{width:34px;height:34px;flex-shrink:0}
+
+        /* SEÇÃO SERVIÇOS (cards maiores) */
+        .section{
+            padding:48px 0;
+        }
+        .section .title{
+            display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;
+        }
+        .section h2{margin:0;font-size:22px;color:#072617}
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:18px;
+        }
+        .card{
+            background:linear-gradient(180deg,#ffffff,#f8faf8);
+            padding:20px;border-radius:14px;box-shadow:var(--shadow);border:1px solid rgba(10,10,10,0.03);
+            transition:transform .35s ease, box-shadow .35s ease;
+            cursor: pointer; /* Adicionado cursor para indicar clique */
+        }
+        .card:hover{transform:translateY(-8px);box-shadow:0 28px 60px rgba(6,12,9,0.12)}
+        .card h3{margin:8px 0 10px 0;font-size:18px}
+        .card p{color:var(--muted);font-size:14px;margin:0}
+        .card .icon{
+            width:58px;height:58px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+            background:linear-gradient(135deg, rgba(31,177,90,0.12), rgba(21,138,69,0.06));color:var(--accent);font-weight:800;
+            font-size:20px;
+        }
+
+        /* PROVA SOCIAL */
+        .testimonials{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .testimony{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow)}
+        .testimony p{font-size:15px;color:var(--muted);margin:10px 0 0}
+
+        /* CTA BAR */
+        .cta-bar{
+            background: linear-gradient(90deg, rgba(31,177,90,0.12), rgba(21,138,69,0.06));
+            border-radius:14px;padding:18px;display:flex;justify-content:space-between;align-items:center;margin-top:28px;
+            gap:18px;
+        }
+
+        /* --- ORÇAMENTO / FORM: Novo Layout e Estilo --- */
+        #orcamento .container {
+            display:grid;
+            grid-template-columns:1fr 420px; /* Mantém 1 coluna para texto e 1 para form no desktop */
+            gap: 32px; /* Aumenta o espaçamento */
+            align-items:start;
+        }
+        
+        .lead-form{
+            max-width:520px;
+            background:linear-gradient(180deg,#fff,#f8faf8);
+            padding:24px; /* Aumenta o padding interno */
+            border-radius:16px; /* Aumenta o arredondamento */
+            box-shadow:0 12px 30px rgba(6,12,9,0.08); /* Sombra mais suave e evidente */
+            border:1px solid rgba(10,10,10,0.05);
+        }
+        .field{
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+            margin-bottom:15px; /* Aumenta o espaçamento entre campos */
+        }
+        label{
+            font-weight:700;
+            color:var(--text);
+            font-size:14px; /* Aumenta a fonte do label */
+        }
+        input[type=text],input[type=email],textarea{
+            padding:14px 16px; /* Aumenta o padding interno dos inputs */
+            border-radius:10px; /* Aumenta o arredondamento */
+            border:1px solid rgba(10,10,10,0.1);
+            font-size:15px; /* Aumenta a fonte do texto digitado */
+            background:#fff;
+            width: 100%;
+            transition: border-color .3s;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--accent); /* Borda fica verde no foco */
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(31,177,90,0.2); /* Sombra no foco */
+        }
+        textarea{min-height:120px;resize:vertical}
+
+        /* Novo estilo para agrupamento de ações */
+        .form-actions{
+            display:flex;
+            flex-direction: column; /* Coloca os botões um abaixo do outro no form */
+            gap:10px;
+            margin-top:20px; /* Aumenta o espaçamento superior */
+        }
+
+        /* Novo estilo para o botão principal (WhatsApp) */
+        .btn-submit{
+            background:#25d366; /* Cor oficial do WhatsApp */
+            color:white;
+            padding:14px 18px;
+            border-radius:12px;
+            border:none;
+            font-weight:800;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            box-shadow:0 6px 18px rgba(37,211,102,0.3); /* Sombra do WhatsApp */
+            transition:background .3s;
+        }
+        .btn-submit:hover{ background:#128c7e; } /* Hover verde escuro */
+
+        /* Novo estilo para o botão secundário (Ligar) */
+        .btn-call {
+            background:var(--accent);
+            color:white;
+            padding:12px 16px;
+            border-radius:10px;
+            border:none;
+            font-weight:700;
+            cursor:pointer;
+            display:block;
+            width: 100%; /* Ocupa a largura total */
+            text-align: center;
+            text-decoration: none;
+            transition:background .3s;
+        }
+        .btn-call:hover{ background:var(--accent-dark); }
+
+
+        /* FOOTER */
+        footer{padding:28px 0;margin-top:36px;background:transparent;color:var(--muted);font-size:14px;text-align:center;border-top:1px solid rgba(10,10,10,0.04)}
+        
+        /* MAPA */
+        .map-iframe{
+            border:0;width:100%;max-width:900px;height:380px;border-radius:12px
+        }
+
+        /* IMAGES MODAL */
+        .images-container{
+            position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,6,0.72);z-index:2000;padding:20px;
+        }
+        .images-gallery{
+            max-width:1100px;width:100%;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+            /* Scroll interno se as imagens excederem a tela */
+            overflow-y: auto; 
+            max-height: 90vh; 
+        }
+        .images-gallery img{max-width:48%;border-radius:10px;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+        
+        /* WHATSAPP FLOAT */
+        .whatsapp-float{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 54px;
+            height: 54px;
+            background: #25d366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            z-index: 1500;
+            text-decoration: none;
+        }
+        .whatsapp-float:hover{
+            background: #128c7e;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 960px){
+            /* MENU - Tablet */
+            .main-menu { display: none; } /* Esconde o menu principal */
+            .menu-toggle { display: block; } /* Mostra o botão hamburger */
+            .cta-header { margin-left: auto; } /* Empurra o CTA para a direita */
+
+            .hero{flex-direction:column-reverse;padding:30px 0}
+            .hero-card img{height:320px}
+            
+            /* Layout do orçamento */
+            #orcamento .container {
+                grid-template-columns:1fr; /* Coluna única no tablet/mobile */
+            }
+            .testimonials{grid-template-columns:1fr}
+            
+            /* CTA BAR */
+            .cta-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* Mobile - Ajustes de layout */
+            .headline { font-size: 32px; }
+            .hero-card img { height: 260px; }
+            .benefits { justify-content: center; }
+            .benefit { width: 100%; justify-content: flex-start; }
+
+            /* Footer */
+            footer .container > div {
+                text-align: center;
+            }
+            
+            /* Modal */
+            .images-gallery img{max-width:100%}
+            
+            /* CTA Bar */
+            .cta-bar a {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 560px){
+            .headline{font-size:24px}
+            .hero-card img{height:200px}
+
+            /* Hero Left: Margens e espaçamentos no mobile */
+            .hero-left {
+                padding-bottom: 20px;
+            }
+        }
+
+        /* MENU MOBILE (Sidebar) */
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(22, 50, 37, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.4s ease-out;
+        }
+        .mobile-menu-overlay.open {
+            transform: translateX(0);
+        }
+        .mobile-menu-overlay a {
+            color: white;
+            font-size: 24px;
+            padding: 15px 0;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .close-mobile-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* ANIMATIONS: subtle */
+        .reveal{opacity:0;transform:translateY(20px);transition:all .6s cubic-bezier(.2,.9,.2,1)}
+        .reveal.visible{opacity:1;transform:none}
+
+        /* Efeito de hover nas imagens da galeria */
+        .produto-item:hover img {
+            transform: scale(1.08);
+        }
+        .produto-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(30,94,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav">
+            <a class="brand" href="#home" aria-label="DenverBrasil">
+                <span class="logo-mark">DB</span>
+                <div>
+                    <h1 style="font-size:14px;margin:0">DenverBrasil</h1>
+                    <div style="font-size:12px;color:var(--muted);margin-top:2px">Serralheria</div>
+                </div>
+            </a>
+
+            <nav>
+                <ul class="main-menu">
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#produtos">Galeria</a></li>
+                    <li><a href="#orcamento">Orçamento</a></li>
+                    <li><a href="#localizacao">Localização</a></li>
+                </ul>
+            </nav>
+
+            <div style="display:flex;gap:12px;align-items:center">
+                <a class="cta-header" href="#orcamento">Peça Orçamento</a>
+                <button class="menu-toggle" aria-label="Abrir Menu" onclick="toggleMenu()">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <button class="close-mobile-menu" aria-label="Fechar Menu" onclick="toggleMenu()">×</button>
+        <a href="#servicos" onclick="toggleMenu()">Serviços</a>
+        <a href="#produtos" onclick="toggleMenu()">Galeria</a>
+        <a href="#orcamento" onclick="toggleMenu()">Orçamento</a>
+        <a href="#localizacao" onclick="toggleMenu()">Localização</a>
+        <a class="btn-primary" href="#orcamento" style="margin-top:20px" onclick="toggleMenu()">Peça Orçamento</a>
+    </div>
+
+    <main class="container">
+        <section class="hero" id="home">
+            <div class="hero-left">
+                <span class="kicker">Serralheria em BH</span>
+                <h2 class="headline">Soluções em <span style="color:#0b2f1a;font-weight:900">metal</span> para sua obra — <span class="typed" id="typed"></span></h2>
+                <p class="sub">Projetos sob medida: pergolados, coberturas, corrimãos e portões. Entrega rápida, instalação com garantia e acabamento premium.</p>
+
+                <div class="hero-actions">
+                    <a class="btn-primary" href="#orcamento" id="ctaHero"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Solicitar Orçamento</a>
+                    <a class="btn-ghost" href="#produtos">Ver Portfólio</a>
+                </div>
+
+                <div class="benefits" aria-hidden="true">
+                    <div class="benefit"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 2l2.5 5L20 8l-4 3 1 6-5-3-5 3 1-6L4 8l5.5-.9L12 2z" fill="#1fb15a" /></svg><div style="font-size:13px"><strong>Acabamento Premium</strong><div style="color:var(--muted);font-size:12px">Pintura e montagem final</div></div></div>
+                    <div class="benefit"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M3 7h18M3 12h18M3 17h18" stroke="#1fb15a" stroke-width="1.6" stroke-linecap="round"/></svg><div style="font-size:13px"><strong>Projetos Rápidos</strong><div style="color:var(--muted);font-size:12px">Orçamento em 24h</div></div></div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-card reveal" id="heroCard">
+                    <img src="images/20241031_153219.jpg" alt="Equipe instalando estrutura metálica" />
+                    <div class="overlay-cta">
+                        <div style="font-size:13px;font-weight:700;color:#0b4425">Trabalhos em destaque</div>
+                        <button onclick="showImages(5)">Ver fotos</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="cta-bar reveal">
+                    <div>
+                        <strong style="font-size:16px">Pronto para transformar seu projeto?</strong>
+                        <div style="color:var(--muted);font-size:13px">Orçamento rápido, pagamento facilitado e garantia de serviço.</div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <a class="btn-primary" href="#orcamento">Peça Orçamento</a>
+                        <a class="btn-ghost" href="tel:+5531986985930">Ligar: (31) 98698-5930</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicos" class="section">
+            <div class="container reveal">
+                <div class="title">
+                    <h2>Serviços que oferecemos</h2>
+                    <div style="color:var(--muted);font-size:13px">Projetos personalizados e manutenção</div>
+                </div>
+
+                <div class="cards">
+                    <div class="card" onclick="showImages(1)" role="button" tabindex="0">
+                        <div style="display:flex;gap:14px;align-items:center">
+                            <div class="icon">P</div>
+                            <div>
+                                <h3>Platibanda</h3>
+                                <p>Estruturas elegantes e funcionais para áreas externas: metálicos, madeira ou mistos, com acabamento refinado.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" onclick="showImages(2)" role="button" tabindex="0">
+                        <div style="display:flex;gap:14px;align-items:center">
+                            <div class="icon">C</div>
+                            <div>
+                                <h3>Cobertura</h3>
+                                <p>Coberturas metálicas e em policarbonato para residências, comércios e indústrias — proteção e estética.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" onclick="showImages(3)" role="button" tabindex="0">
+                        <div style="display:flex;gap:14px;align-items:center">
+                            <div class="icon">C</div>
+                            <div>
+                                <h3>Corrimão</h3>
+                                <p>Corrimãos em inox, ferro ou alumínio, sendo seguros e com design moderno para escadas e rampas.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" onclick="showImages(4)" role="button" tabindex="0">
+                        <div style="display:flex;gap:14px;align-items:center">
+                            <div class="icon">A</div>
+                            <div>
+                                <h3>Alambrado</h3>
+                                <p>Portões de correr, basculantes e de abrir — manuais ou automatizados — com pintura eletrostática.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="produtos" class="section reveal">
+            <div class="container">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:25px">
+                    <h2 style="font-size:26px;color:var(--text);font-weight:800">Galeria de Projetos</h2>
+                    <p style="color:var(--muted);font-size:14px">Fotos reais de obras e instalações DenverBrasil</p>
+                </div>
+
+                <div class="gallery-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                    gap: 20px;
+                ">
+                    <div class="produto-item" style="
+                        position: relative;
+                        overflow: hidden;
+                        border-radius: 14px;
+                        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+                        cursor: pointer;
+                        transition: transform 0.4s ease;
+                    " onclick="showImages(5)">
+                        <img src="images/pergolado1.jpg" alt="Projeto finalizado" style="width:100%;height:240px;object-fit:cover;transition:transform 0.5s ease;">
+                        <div style="
+                            position:absolute;
+                            inset:0;
+                            background:linear-gradient(to top, rgba(0,30,60,0.6), transparent 60%);
+                            display:flex;
+                            flex-direction:column;
+                            justify-content:flex-end;
+                            padding:18px;
+                            color:#fff;
+                        ">
+                            <h3 style="margin:0;font-size:18px;font-weight:700;">Ver Fotos da Obra</h3>
+                            <p style="margin-top:6px;font-size:14px;color:#dbe5f5;">Estruturas e acabamentos produzidos por nossa equipe.</p>
+                        </div>
+                    </div>
+
+                    <div class="produto-item" style="
+                        position: relative;
+                        overflow: hidden;
+                        border-radius: 14px;
+                        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+                        cursor: pointer;
+                        transition: transform 0.4s ease;
+                    " onclick="showImages(6)">
+                        <img src="images/20241015_153007.jpg" alt="Vídeo do projeto" style="width:100%;height:240px;object-fit:cover;transition:transform 0.5s ease;">
+                        <div style="
+                            position:absolute;
+                            inset:0;
+                            background:linear-gradient(to top, rgba(0,30,60,0.6), transparent 60%);
+                            display:flex;
+                            flex-direction:column;
+                            justify-content:flex-end;
+                            padding:18px;
+                            color:#fff;
+                        ">
+                            <h3 style="margin:0;font-size:18px;font-weight:700;">Outros Projetos</h3>
+                            <p style="margin-top:6px;font-size:14px;color:#dbe5f5;">Veja mais da nossa expertise e portfólio completo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section reveal">
+            <div class="container">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px">
+                    <h2>O que nossos clientes dizem</h2>
+                    <div style="color:var(--muted);font-size:13px">Confiança e qualidade comprovada</div>
+                </div>
+
+                <div class="testimonials">
+                    <div class="testimony card">
+                        <strong>Mariana S. — Arquitetura</strong>
+                        <p>"Profissionais pontuais e com acabamento impecável. Recomendo para projetos residenciais e comerciais."</p>
+                    </div>
+                    <div class="testimony card">
+                        <strong>Carlos M. — Construtora</strong>
+                        <p>"Entrega no prazo combinado e suporte técnico excelente. Equipe qualificada e organizada."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="orcamento" class="section reveal">
+            <div class="container"> <div>
+                    <h2>Solicite seu orçamento — sem compromisso</h2>
+                    <p style="color:var(--muted);margin-top:8px">Nos diga o que precisa que retornamos com valor e prazo. Atendemos BH e região.</p>
+
+                    <ul style="margin-top:18px;color:var(--muted);font-size:14px;line-height:1.7">
+                        <li><strong>Orçamento ágil:</strong> resposta em até 24 horas</li>
+                        <li><strong>Medidas e projeto:</strong> fazemos visita técnica quando necessário</li>
+                        <li><strong>Garantia:</strong> garantia de serviço e acabamento</li>
+                    </ul>
+                </div>
+
+                <div class="lead-form">
+                    <form id="leadForm" onsubmit="return false" aria-label="Formulário de orçamento">
+                        <div class="field">
+                            <label for="nome">Seu Nome</label>
+                            <input id="nome" type="text" placeholder="Ex: João Silva" required />
+                        </div>
+                        <div class="field">
+                            <label for="telefone">Telefone / WhatsApp</label>
+                            <input id="telefone" type="text" placeholder="(31) 9xxxx-xxxx" required />
+                        </div>
+                        <div class="field">
+                            <label for="email">E-mail (Opcional)</label>
+                            <input id="email" type="email" placeholder="seu@email.com" />
+                        </div>
+                        <div class="field">
+                            <label for="mensagem">Descreva o Serviço que Precisa</label>
+                            <textarea id="mensagem" placeholder="Ex: Pergolado 5x3m, Corrimão em inox para escada..." required></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-submit" onclick="sendLead()" type="submit">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v10"/><path d="M10 9l2-2 2 2"/></svg>
+                                Enviar Orçamento por WhatsApp
+                            </button>
+
+                        </div>
+                        <div id="formNote" style="color:var(--muted);font-size:13px;margin-top:10px;text-align:center;">Envie o formulário para abrir o WhatsApp automaticamente.</div>
+                    </form>
+                </div>
+                </div>
+        </section>
+
+        <section id="localizacao" class="section reveal">
+            <div class="container">
+                <h2>Localização</h2>
+                <p style="color:var(--muted)">Atendemos Belo Horizonte e região — venha nos visitar ou solicite visita técnica.</p>
+
+                <div style="margin-top:18px;display:flex;justify-content:center">
+                    <iframe class="map-iframe" src="https://maps.google.com/maps?width=100%25&height=600&hl=pt&q=Rua%20Paulo%20Kruger%20Mour%C3%A3o,%20Belo%20Horizonte+(DenverBrasil)&t=&z=14&ie=UTF8&iwloc=B&output=embed" style="border:0;width:100%;max-width:900px;height:380px;border-radius:12px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="images-container" id="imagesContainer" aria-hidden="true">
+        <div class="images-gallery" id="imagesGallery" role="dialog" aria-label="Galeria de imagens"></div>
+        <div style="margin-top:16px">
+            <button class="close-btn" onclick="hideImages()">Fechar</button>
+        </div>
+    </div>
+
+    <a class="whatsapp-float" href="https://wa.me/5531986985930" target="_blank" aria-label="Fale conosco no WhatsApp">💬</a>
+
+    <footer>
+        <div class="container">
+            <div style="display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center">
+                <div style="font-weight:700">Serralheria DenverBrasil</div>
+                <div style="color:var(--muted)">Rua Paulo Kruger Mourão — Belo Horizonte </div>
+                <div style="color:var(--muted);font-size:13px;margin-top:8px">© 2025 DenverBrasil — Todos os direitos reservados</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ---------- MENU MOBILE TOGGLE (Novo) ---------- */
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+            document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+        }
+
+        /* ---------- TYPING EFFECT (hero) ---------- */
+        (function(){
+            const phrases = ["Pergolados", "Coberturas", "Corrimãos", "Portões", "Escadas", "Guarda-corpo","Fachadas",];
+            let idxPhrase = 0;
+            let idxChar = 0;
+            const el = document.getElementById('typed');
+            let forward = true;
+            function tick(){
+                const current = phrases[idxPhrase];
+                if(forward){
+                    idxChar++;
+                    if(idxChar > current.length){ forward=false; setTimeout(tick,900); return; }
+                } else {
+                    idxChar--;
+                    if(idxChar === 0){ forward=true; idxPhrase=(idxPhrase+1)%phrases.length; setTimeout(tick,300); return; }
+                }
+                el.textContent = current.slice(0, idxChar);
+                setTimeout(tick, forward?60:30);
+            }
+            tick();
+        })();
+
+        /* ---------- SCROLL REVEAL ---------- */
+        (function(){
+            const revealEls = document.querySelectorAll('.reveal');
+            const io = new IntersectionObserver((entries)=>{
+                entries.forEach(e=>{
+                    if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+                });
+            }, {threshold:0.12});
+            revealEls.forEach(el=>io.observe(el));
+        })();
+
+        /* ---------- HERO BANNER ROTATION (background) ---------- */
+        (function(){
+            const banner = document.getElementById('heroCard');
+            const heroSection = document.querySelector('.hero-card');
+            const imgs = ["images/20241015_153007.jpg","images/20250814_161211.jpg","images/20250825_155937.jpg",];
+            let i=0;
+            function change(){
+                i = (i+1)%imgs.length;
+                
+                const imgTag = heroSection && heroSection.querySelector('img');
+                if(imgTag) imgTag.src = imgs[i];
+            }
+            setInterval(change,5000);
+        })();
+
+        /* ---------- IMAGES DATA (gallery) ---------- */
+        const imagesData = {
+            1: ["images/20250908_153750.jpg"],
+            2: ["images/20241031_153219.jpg"],
+            3: ["images/20241031_153219.jpg"],
+            4: ["images/Alambrado.jpg"],
+            5: ["images/20241031_153219.jpg","images/20250825_155937.jpg","images/20241016_122806.jpg"],
+            6: ["images/20241031_153219.jpg","images/20241031_153219.jpg","images/banner3.jpg","images/banner3.jpg"]
+        };
+
+        function showImages(id){
+            const container = document.getElementById('imagesContainer');
+            const gallery = document.getElementById('imagesGallery');
+            gallery.innerHTML = '';
+            const arr = imagesData[id] || [];
+            if(arr.length === 0){
+                gallery.innerHTML = '<div style="color:white;font-weight:700;">Sem imagens para esta categoria no momento.</div>';
+            } else {
+                arr.forEach(src=>{
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = "Foto do serviço";
+                    img.loading = "lazy";
+                    gallery.appendChild(img);
+                });
+            }
+            container.style.display = 'flex';
+            container.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+        }
+        function hideImages(){
+            const container = document.getElementById('imagesContainer');
+            container.style.display = 'none';
+            container.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+        }
+
+        /* ---------- LEAD FORM: send via WhatsApp (ajustado para o novo botão) ---------- */
+        function sendLead(){
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mensagem = document.getElementById('mensagem').value.trim();
+
+            const note = document.getElementById('formNote');
+
+            if(!nome || !telefone || !mensagem){
+                note.style.color = '#b00020';
+                note.textContent = 'Preencha Nome, Telefone/WhatsApp e a Descrição do Serviço.';
+                return;
+            }
+
+            // build message:
+            let texto = `*SOLICITAÇÃO DE ORÇAMENTO DenverBrasil*\n\n*Nome:* ${nome}\n*Telefone/WhatsApp:* ${telefone}`;
+            if(email) texto += `\n*E-mail:* ${email}`;
+            texto += `\n\n*Descrição do Serviço:*\n${mensagem}`;
+
+            const numeroWhatsApp = '5531986985930';
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
+            // open in new tab
+            window.open(url,'_blank');
+
+            // Feedback quick:
+            note.style.color = 'green';
+            note.textContent = 'Abrindo WhatsApp... Aguarde e confirme o envio.';
+            setTimeout(()=>{ note.textContent = 'Envie o formulário para abrir o WhatsApp automaticamente.' }, 6000);
+        }
+
+        /* ---------- quick-call (não mais necessário como função separada, mas mantida) ---------- */
+        function callPhone(){
+            window.location.href = 'tel:+5531986985930';
+        }
+
+        /* ---------- keyboard accessibility for cards (Enter) ---------- */
+        document.addEventListener('keydown', (e)=>{
+            if(e.key === 'Escape') hideImages();
+            if(e.key === 'Enter'){
+                const active = document.activeElement;
+                if(active && active.classList.contains('card')) active.click();
+            }
+        });
+
+        /* ---------- small UX polish: smooth scroll for anchor links (fix) ---------- */
+        document.querySelectorAll('a[href^="#"]').forEach(a=>{
+            a.addEventListener('click',(ev)=>{
+                const href = a.getAttribute('href');
+                if(href.length>1){
+                    const el = document.querySelector(href);
+                    if(el){ ev.preventDefault(); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
