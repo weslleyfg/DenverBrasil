@@ -260,7 +260,7 @@
     background: transparent;
     border: none;
     padding: 0.6rem 0;
-    width: 140px;
+    width: 125px;
   }
   .filter-badge {
     background: rgba(45,212,191,0.15);
@@ -394,8 +394,10 @@
         </div>
         <div class="date-filter-bar">
           <i class="fas fa-calendar-alt"></i>
-          <input type="date" id="liveDateFilter">
-          <button class="clear-search" id="clearDateBtn" title="Limpar data"><i class="fas fa-eraser"></i></button>
+          <input type="date" id="liveDateStart" title="Data inicial">
+          <span style="color:#5eead4; font-size:0.75rem;">ate</span>
+          <input type="date" id="liveDateEnd" title="Data final">
+          <button class="clear-search" id="clearDateBtn" title="Limpar periodo"><i class="fas fa-eraser"></i></button>
         </div>
         <div class="filter-actions">
           <span id="filterStatusBadge" class="filter-badge" style="display: none;"></span>
@@ -427,6 +429,8 @@
   let currentTab = "resumo";
   let liveSearchTerm = "";
   let liveDateFilter = "";
+  let liveDateStart = "";
+  let liveDateEnd = "";
   
   const fieldLabels = {
     data: "Data", categoria: "Categoria", descricao: "Descrição", valor: "Valor (R$)", obs: "Observações",
@@ -510,11 +514,11 @@
   }
   
   function sortCollections() {
-    if(db.gastos) db.gastos.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-    if(db.obra) db.obra.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-    if(db.faltas) db.faltas.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-    if(db.pendencias) db.pendencias.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-    if(db.caixa) db.caixa.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(db.gastos) db.gastos.sort((a,b)=>normalizeDateForCompare(b.data||'').localeCompare(normalizeDateForCompare(a.data||'')));
+    if(db.obra) db.obra.sort((a,b)=>normalizeDateForCompare(b.data||'').localeCompare(normalizeDateForCompare(a.data||'')));
+    if(db.faltas) db.faltas.sort((a,b)=>normalizeDateForCompare(b.data||'').localeCompare(normalizeDateForCompare(a.data||'')));
+    if(db.pendencias) db.pendencias.sort((a,b)=>normalizeDateForCompare(b.data||'').localeCompare(normalizeDateForCompare(a.data||'')));
+    if(db.caixa) db.caixa.sort((a,b)=>normalizeDateForCompare(b.data||'').localeCompare(normalizeDateForCompare(a.data||'')));
   }
   
   function save() { 
@@ -539,6 +543,41 @@
       return currentTab;
     }
     return null;
+  }
+
+  function normalizeDateForCompare(value) {
+    if(!value) return "";
+    const s = String(value).trim();
+    let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m) return `${m[1]}-${m[2]}-${m[3]}`;
+    m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+    m = s.match(/^(\d{2})-(\d{2})-(\d{4})/);
+    if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+    return s;
+  }
+
+  function itemInDateRange(item) {
+    if(!liveDateFilter && !liveDateStart && !liveDateEnd) return true;
+    const itemDate = normalizeDateForCompare(item.data || item.Data || "");
+    const exactDate = normalizeDateForCompare(liveDateFilter);
+    const startDate = normalizeDateForCompare(liveDateStart);
+    const endDate = normalizeDateForCompare(liveDateEnd);
+    if(!itemDate) return false;
+    if(exactDate) return itemDate === exactDate;
+    if(startDate && itemDate < startDate) return false;
+    if(endDate && itemDate > endDate) return false;
+    return true;
+  }
+
+  function filterBySearchAndDate(items) {
+    let data = [...items];
+    if(liveSearchTerm) {
+      const searchLower = liveSearchTerm.toLowerCase();
+      data = data.filter(item => Object.values(item).some(v => String(v).toLowerCase().includes(searchLower)));
+    }
+    if(liveDateFilter || liveDateStart || liveDateEnd) data = data.filter(itemInDateRange);
+    return data;
   }
   
   function renderMenu() {
@@ -614,17 +653,24 @@
     
     const searchInput = document.getElementById("liveSearchInput");
     if(searchInput) searchInput.value = liveSearchTerm;
-    const dateInput = document.getElementById("liveDateFilter");
-    if(dateInput) dateInput.value = liveDateFilter;
+    const dateStartInput = document.getElementById("liveDateStart");
+    if(dateStartInput) dateStartInput.value = liveDateStart;
+    const dateEndInput = document.getElementById("liveDateEnd");
+    if(dateEndInput) dateEndInput.value = liveDateEnd;
     updateFilterBadge();
   }
   
   function updateFilterBadge() {
     const badge = document.getElementById("filterStatusBadge");
-    if(liveSearchTerm || liveDateFilter) {
+    if(liveSearchTerm || liveDateFilter || liveDateStart || liveDateEnd) {
       let text = "";
       if(liveSearchTerm) text += `🔍 "${liveSearchTerm.substring(0,20)}"`;
       if(liveDateFilter) text += `${text ? " • " : ""}📅 ${formatDateBR(liveDateFilter)}`;
+      if(liveDateStart || liveDateEnd) {
+        const startText = liveDateStart ? formatDateBR(liveDateStart) : "inicio";
+        const endText = liveDateEnd ? formatDateBR(liveDateEnd) : "hoje";
+        text += `${text ? " • " : ""}📅 ${startText} ate ${endText}`;
+      }
       badge.innerHTML = `<i class="fas fa-filter"></i> ${text} <button style="background:none; border:none; color:inherit; margin-left:6px; cursor:pointer;" onclick="window.clearAllFilters()">✕</button>`;
       badge.style.display = "inline-flex";
     } else {
@@ -635,17 +681,23 @@
   window.clearAllFilters = function() {
     liveSearchTerm = "";
     liveDateFilter = "";
+    liveDateStart = "";
+    liveDateEnd = "";
     const searchInput = document.getElementById("liveSearchInput");
     if(searchInput) searchInput.value = "";
-    const dateInput = document.getElementById("liveDateFilter");
-    if(dateInput) dateInput.value = "";
+    const dateStartInput = document.getElementById("liveDateStart");
+    if(dateStartInput) dateStartInput.value = "";
+    const dateEndInput = document.getElementById("liveDateEnd");
+    if(dateEndInput) dateEndInput.value = "";
     renderTable();
     updateFilterBadge();
   };
   
   function renderStats() {
-    let totalGastos = db.gastos.reduce((acc,g) => acc + parseMoney(g.valor), 0);
-    let obrasAtivas = db.obra.filter(o => o.status === "Em Andamento").length;
+    const gastosPeriodo = filterBySearchAndDate(db.gastos);
+    const obrasPeriodo = (liveDateFilter || liveDateStart || liveDateEnd) ? db.obra.filter(itemInDateRange) : db.obra;
+    let totalGastos = gastosPeriodo.reduce((acc,g) => acc + parseMoney(g.valor), 0);
+    let obrasAtivas = obrasPeriodo.filter(o => o.status === "Em Andamento").length;
     let totalRegistros = db.gastos.length + db.obra.length + db.pix.length + db.faltas.length + db.das.length + db.pendencias.length + db.caixa.length;
     document.getElementById("totalRegistrosSpan").innerHTML = totalRegistros;
     document.getElementById("statsPanel").innerHTML = `
@@ -660,7 +712,7 @@
   
   function renderCategoryAnalysis() {
     let catTotals = {};
-    db.gastos.forEach(g => { let c = g.categoria || "Outros"; catTotals[c] = (catTotals[c] || 0) + parseMoney(g.valor); });
+    filterBySearchAndDate(db.gastos).forEach(g => { let c = g.categoria || "Outros"; catTotals[c] = (catTotals[c] || 0) + parseMoney(g.valor); });
     let totalAll = Object.values(catTotals).reduce((a,b)=>a+b,0);
     let container = document.getElementById("categoryInsight");
     if(Object.keys(catTotals).length === 0) { 
@@ -767,8 +819,8 @@
       });
     }
     
-    if(liveDateFilter && (currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa" || isCategoryTab())) {
-      dataSource = dataSource.filter(item => item.data === liveDateFilter);
+    if((liveDateFilter || liveDateStart || liveDateEnd) && (currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa" || isCategoryTab())) {
+      dataSource = dataSource.filter(itemInDateRange);
     }
     
     return dataSource;
@@ -777,13 +829,16 @@
   function renderTable() {
     if(currentTab === "resumo") {
       let catTot = {};
-      db.gastos.forEach(g => { let c = g.categoria || "Outros"; catTot[c] = (catTot[c] || 0) + parseMoney(g.valor); });
+      const resumoGastos = filterBySearchAndDate(db.gastos);
+      resumoGastos.forEach(g => { let c = g.categoria || "Outros"; catTot[c] = (catTot[c] || 0) + parseMoney(g.valor); });
+      const totalResumo = resumoGastos.reduce((acc, g) => acc + parseMoney(g.valor), 0);
       document.getElementById("thead").innerHTML = "<tr><th>Categoria</th><th>Valor Total</th></tr>";
       let rows = "";
-      for(let [c,val] of Object.entries(catTot)) rows += `<tr><td style="font-weight:600;">${escapeHtml(c)}</td><td class="money">${formatMoney(val)}</td></tr>`;
+      for(let [c,val] of Object.entries(catTot).sort((a,b)=>b[1]-a[1])) rows += `<tr><td style="font-weight:600;">${escapeHtml(c)}</td><td class="money">${formatMoney(val)}</td></tr>`;
+      if(rows) rows += `<tr><td style="font-weight:800;">TOTAL DO PERIODO</td><td class="money">${formatMoney(totalResumo)}</td></tr>`;
       document.getElementById("tbody").innerHTML = rows || "<tr><td colspan='2' class='no-results'>Nenhum dado cadastrado</td></tr>";
       document.getElementById("tableTitle").innerHTML = "Resumo por Categoria";
-      document.getElementById("rowCount").innerHTML = Object.keys(catTot).length;
+      document.getElementById("rowCount").innerHTML = resumoGastos.length;
       return;
     }
     
@@ -821,8 +876,8 @@
     let schema = isCategoryTab() ? schemas.gastos : (schemas[currentTab] || []);
     if(!schema.length) return;
     
-    if(currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa") {
-      filteredData.sort((a,b)=> (b.data || '').localeCompare(a.data || ''));
+    if(currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa" || isCategoryTab()) {
+      filteredData.sort((a,b)=> normalizeDateForCompare(b.data || '').localeCompare(normalizeDateForCompare(a.data || '')));
     }
     
     document.getElementById("thead").innerHTML = `<tr>${schema.map(f => `<th>${fieldLabels[f]||f}</th>`).join('')}<th>Ações</th></tr>`;
@@ -837,7 +892,7 @@
         let originalIdx = db[getDataSourceName()]?.findIndex(d => d === item) ?? i;
         const currentDate = item.data || "Sem data";
         
-        if(currentDate !== lastDate && (currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa") && !liveSearchTerm && !liveDateFilter) {
+        if(currentDate !== lastDate && (currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa" || isCategoryTab()) && !liveSearchTerm && !liveDateFilter) {
           tbodyHtml += `<tr class="date-separator-row"><td colspan="${schema.length+1}" class="date-separator-cell"><i class="fas fa-calendar-alt"></i> 📅 ${formatDateBR(currentDate)}</td></tr>`;
           lastDate = currentDate;
         }
@@ -1275,12 +1330,28 @@
       };
     }
     
-    const dateFilter = document.getElementById("liveDateFilter");
-    if(dateFilter) {
-      dateFilter.onchange = (e) => {
-        liveDateFilter = e.target.value;
-        renderTable();
-        updateFilterBadge();
+    const dateStart = document.getElementById("liveDateStart");
+    if(dateStart) {
+      dateStart.onchange = (e) => {
+        liveDateStart = e.target.value;
+        if(liveDateStart && liveDateEnd && liveDateStart > liveDateEnd) {
+          liveDateEnd = liveDateStart;
+          const dateEnd = document.getElementById("liveDateEnd");
+          if(dateEnd) dateEnd.value = liveDateEnd;
+        }
+        renderAll();
+      };
+    }
+
+    const dateEnd = document.getElementById("liveDateEnd");
+    if(dateEnd) {
+      dateEnd.onchange = (e) => {
+        liveDateEnd = e.target.value;
+        if(liveDateStart && liveDateEnd && liveDateEnd < liveDateStart) {
+          liveDateStart = liveDateEnd;
+          if(dateStart) dateStart.value = liveDateStart;
+        }
+        renderAll();
       };
     }
     
@@ -1298,9 +1369,11 @@
     if(clearDateBtn) {
       clearDateBtn.onclick = () => {
         liveDateFilter = "";
-        if(dateFilter) dateFilter.value = "";
-        renderTable();
-        updateFilterBadge();
+        liveDateStart = "";
+        liveDateEnd = "";
+        if(dateStart) dateStart.value = "";
+        if(dateEnd) dateEnd.value = "";
+        renderAll();
       };
     }
     
