@@ -1,886 +1,1327 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>DenverBrasil — Engenharia & Serralheria</title>
-    <meta name="description" content="DenverBrasil — Soluções em pergolados, coberturas, corrimãos e portões. Projeto, fabricação e instalação em BH." />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root{
-            --bg:#f5f7f6;
-            --muted:#9aa3a0;
-            --text:#163225;
-            --accent:#1fb15a; /* verde */
-            --accent-dark:#158a45;
-            --card:#ffffff;
-            --glass: rgba(255,255,255,0.6);
-            --shadow: 0 8px 30px rgba(5,10,10,0.08);
-            --container: 1150px;
-        }
-
-        *{box-sizing:border-box}
-        html{scroll-behavior: smooth;} /* Scroll suave adicionado */
-        html,body{height:100%}
-        body{
-            margin:0;
-            font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-            background:linear-gradient(180deg,#f8faf9,#f5f7f6);
-            color:var(--text);
-            -webkit-font-smoothing:antialiased;
-            -moz-osx-font-smoothing:grayscale;
-            line-height:1.5;
-        }
-
-        /* Novo estilo para o botão de fechar do modal */
-        .close-btn{
-            background:rgba(255,255,255,0.2);
-            color:white;
-            padding:10px 18px;
-            border:1px solid rgba(255,255,255,0.1);
-            border-radius:10px;
-            font-weight:700;
-            cursor:pointer;
-            backdrop-filter: blur(4px);
-        }
-        .close-btn:hover{background:rgba(255,255,255,0.3)}
-
-        /* CONTAINER */
-        .container{
-            width:90%;
-            max-width:var(--container);
-            margin:0 auto;
-        }
-
-        /* HEADER */
-        header{
-            position:sticky;
-            top:0;
-            z-index:1200;
-            background:linear-gradient(90deg, var(--glass), rgba(255,255,255,0.45));
-            backdrop-filter: blur(6px);
-            border-bottom:1px solid rgba(10,10,10,0.04);
-        }
-        .nav{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:20px;
-            padding:14px 0;
-        }
-        .brand{
-            display:flex;
-            gap:14px;
-            align-items:center;
-            text-decoration:none;
-            color:var(--text);
-        }
-        .logo-mark{
-            width:44px;height:44px;border-radius:8px;
-            background:linear-gradient(135deg,var(--accent),var(--accent-dark));
-            display:flex;align-items:center;justify-content:center;color:white;font-weight:800;
-            box-shadow:0 6px 18px rgba(31,177,90,0.18);
-            font-size:18px;
-        }
-        .brand h1{font-size:18px;margin:0;font-weight:700}
-        
-        /* MENU Desktop - visível por padrão */
-        .main-menu{display:flex;gap:20px;align-items:center;list-style:none;margin:0;padding:0}
-        .main-menu a{color:var(--text);text-decoration:none;font-weight:600;font-size:14px;opacity:.95}
-        .menu-toggle{display:none;font-size:24px;background:none;border:none;cursor:pointer}
-        .cta-header{
-            background:var(--accent);
-            color:white;
-            padding:10px 14px;border-radius:10px;
-            text-decoration:none;font-weight:700;
-            box-shadow:0 6px 18px rgba(31,177,90,0.18);
-        }
-        .cta-header:hover{background:var(--accent-dark)}
-
-        /* HERO */
-        .hero{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:40px;
-            padding:64px 0;
-        }
-        .hero-left{flex:1;min-width:300px}
-        .hero-right{flex:1;display:flex;align-items:center;justify-content:center}
-        .kicker{
-            display:inline-block;
-            background:rgba(31,177,90,0.12);
-            color:var(--accent);
-            padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;margin-bottom:18px;
-        }
-        .headline{
-            font-size:38px;
-            line-height:1.02;
-            margin:0 0 16px 0;
-            color:#072617;
-            letter-spacing:-0.5px;
-            font-weight:800;
-        }
-        .headline .typed{
-            color:var(--accent);
-            white-space:nowrap;
-            border-right:2px solid rgba(31,177,90,0.9);
-            padding-right:6px;
-            margin-left:6px;
-        }
-        .sub{
-            color:var(--muted);font-size:16px;margin-bottom:24px;
-        }
-        .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-        .btn-primary{
-            background:linear-gradient(90deg,var(--accent),var(--accent-dark));
-            color:white;padding:14px 18px;border-radius:12px;border:none;font-weight:800;
-            text-decoration:none;display:inline-flex;align-items:center;gap:10px;box-shadow:var(--shadow);
-        }
-        .btn-ghost{
-            background:transparent;border:1px solid rgba(10,10,10,0.06);padding:12px 16px;border-radius:12px;font-weight:700;
-            color:var(--text);
-        }
-
-        /* HERO IMAGE CARD */
-        .hero-card{
-            width:100%;
-            max-width:520px;
-            border-radius:18px;
-            overflow:hidden;
-            position:relative;
-            box-shadow:0 30px 60px rgba(6,12,9,0.12);
-            transition:transform .6s cubic-bezier(.2,.9,.2,1);
-            background:linear-gradient(180deg, #e9f6ee 0%, #ffffff 100%);
-        }
-        .hero-card img{width:100%;height:420px;object-fit:cover;display:block}
-        .hero-card .overlay-cta{
-            position:absolute;left:18px;bottom:18px;background:rgba(255,255,255,0.92);padding:12px 14px;border-radius:10px;
-            display:flex;gap:12px;align-items:center;box-shadow:0 6px 18px rgba(0,0,0,0.08)
-        }
-        .hero-card .overlay-cta button{background:var(--accent);border:none;color:#fff;padding:10px 12px;border-radius:8px;font-weight:700;cursor:pointer}
-        .hero-card:hover{transform:translateY(-8px)}
-
-        /* BENEFÍCIOS */
-        .benefits{
-            display:flex;gap:18px;margin-top:28px;flex-wrap:wrap;
-        }
-        .benefit{
-            background:var(--card);padding:12px 14px;border-radius:10px;border:1px solid rgba(10,10,10,0.04);
-            display:flex;gap:12px;align-items:center;
-        }
-        .benefit svg{width:34px;height:34px;flex-shrink:0}
-
-        /* SEÇÃO SERVIÇOS (cards maiores) */
-        .section{
-            padding:48px 0;
-        }
-        .section .title{
-            display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;
-        }
-        .section h2{margin:0;font-size:22px;color:#072617}
-        .cards{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-            gap:18px;
-        }
-        .card{
-            background:linear-gradient(180deg,#ffffff,#f8faf8);
-            padding:20px;border-radius:14px;box-shadow:var(--shadow);border:1px solid rgba(10,10,10,0.03);
-            transition:transform .35s ease, box-shadow .35s ease;
-            cursor: pointer; /* Adicionado cursor para indicar clique */
-        }
-        .card:hover{transform:translateY(-8px);box-shadow:0 28px 60px rgba(6,12,9,0.12)}
-        .card h3{margin:8px 0 10px 0;font-size:18px}
-        .card p{color:var(--muted);font-size:14px;margin:0}
-        .card .icon{
-            width:58px;height:58px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-            background:linear-gradient(135deg, rgba(31,177,90,0.12), rgba(21,138,69,0.06));color:var(--accent);font-weight:800;
-            font-size:20px;
-        }
-
-        /* PROVA SOCIAL */
-        .testimonials{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-        .testimony{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow)}
-        .testimony p{font-size:15px;color:var(--muted);margin:10px 0 0}
-
-        /* CTA BAR */
-        .cta-bar{
-            background: linear-gradient(90deg, rgba(31,177,90,0.12), rgba(21,138,69,0.06));
-            border-radius:14px;padding:18px;display:flex;justify-content:space-between;align-items:center;margin-top:28px;
-            gap:18px;
-        }
-
-        /* --- ORÇAMENTO / FORM: Novo Layout e Estilo --- */
-        #orcamento .container {
-            display:grid;
-            grid-template-columns:1fr 420px; /* Mantém 1 coluna para texto e 1 para form no desktop */
-            gap: 32px; /* Aumenta o espaçamento */
-            align-items:start;
-        }
-        
-        .lead-form{
-            max-width:520px;
-            background:linear-gradient(180deg,#fff,#f8faf8);
-            padding:24px; /* Aumenta o padding interno */
-            border-radius:16px; /* Aumenta o arredondamento */
-            box-shadow:0 12px 30px rgba(6,12,9,0.08); /* Sombra mais suave e evidente */
-            border:1px solid rgba(10,10,10,0.05);
-        }
-        .field{
-            display:flex;
-            flex-direction:column;
-            gap:6px;
-            margin-bottom:15px; /* Aumenta o espaçamento entre campos */
-        }
-        label{
-            font-weight:700;
-            color:var(--text);
-            font-size:14px; /* Aumenta a fonte do label */
-        }
-        input[type=text],input[type=email],textarea{
-            padding:14px 16px; /* Aumenta o padding interno dos inputs */
-            border-radius:10px; /* Aumenta o arredondamento */
-            border:1px solid rgba(10,10,10,0.1);
-            font-size:15px; /* Aumenta a fonte do texto digitado */
-            background:#fff;
-            width: 100%;
-            transition: border-color .3s;
-        }
-        input:focus, textarea:focus {
-            border-color: var(--accent); /* Borda fica verde no foco */
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(31,177,90,0.2); /* Sombra no foco */
-        }
-        textarea{min-height:120px;resize:vertical}
-
-        /* Novo estilo para agrupamento de ações */
-        .form-actions{
-            display:flex;
-            flex-direction: column; /* Coloca os botões um abaixo do outro no form */
-            gap:10px;
-            margin-top:20px; /* Aumenta o espaçamento superior */
-        }
-
-        /* Novo estilo para o botão principal (WhatsApp) */
-        .btn-submit{
-            background:#25d366; /* Cor oficial do WhatsApp */
-            color:white;
-            padding:14px 18px;
-            border-radius:12px;
-            border:none;
-            font-weight:800;
-            cursor:pointer;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            gap:8px;
-            box-shadow:0 6px 18px rgba(37,211,102,0.3); /* Sombra do WhatsApp */
-            transition:background .3s;
-        }
-        .btn-submit:hover{ background:#128c7e; } /* Hover verde escuro */
-
-        /* Novo estilo para o botão secundário (Ligar) */
-        .btn-call {
-            background:var(--accent);
-            color:white;
-            padding:12px 16px;
-            border-radius:10px;
-            border:none;
-            font-weight:700;
-            cursor:pointer;
-            display:block;
-            width: 100%; /* Ocupa a largura total */
-            text-align: center;
-            text-decoration: none;
-            transition:background .3s;
-        }
-        .btn-call:hover{ background:var(--accent-dark); }
-
-
-        /* FOOTER */
-        footer{padding:28px 0;margin-top:36px;background:transparent;color:var(--muted);font-size:14px;text-align:center;border-top:1px solid rgba(10,10,10,0.04)}
-        
-        /* MAPA */
-        .map-iframe{
-            border:0;width:100%;max-width:900px;height:380px;border-radius:12px
-        }
-
-        /* IMAGES MODAL */
-        .images-container{
-            position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,6,0.72);z-index:2000;padding:20px;
-        }
-        .images-gallery{
-            max-width:1100px;width:100%;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
-            /* Scroll interno se as imagens excederem a tela */
-            overflow-y: auto; 
-            max-height: 90vh; 
-        }
-        .images-gallery img{max-width:48%;border-radius:10px;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
-        
-        /* WHATSAPP FLOAT */
-        .whatsapp-float{
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 54px;
-            height: 54px;
-            background: #25d366;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-            z-index: 1500;
-            text-decoration: none;
-        }
-        .whatsapp-float:hover{
-            background: #128c7e;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 960px){
-            /* MENU - Tablet */
-            .main-menu { display: none; } /* Esconde o menu principal */
-            .menu-toggle { display: block; } /* Mostra o botão hamburger */
-            .cta-header { margin-left: auto; } /* Empurra o CTA para a direita */
-
-            .hero{flex-direction:column-reverse;padding:30px 0}
-            .hero-card img{height:320px}
-            
-            /* Layout do orçamento */
-            #orcamento .container {
-                grid-template-columns:1fr; /* Coluna única no tablet/mobile */
-            }
-            .testimonials{grid-template-columns:1fr}
-            
-            /* CTA BAR */
-            .cta-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            /* Mobile - Ajustes de layout */
-            .headline { font-size: 32px; }
-            .hero-card img { height: 260px; }
-            .benefits { justify-content: center; }
-            .benefit { width: 100%; justify-content: flex-start; }
-
-            /* Footer */
-            footer .container > div {
-                text-align: center;
-            }
-            
-            /* Modal */
-            .images-gallery img{max-width:100%}
-            
-            /* CTA Bar */
-            .cta-bar a {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-        
-        @media (max-width: 560px){
-            .headline{font-size:24px}
-            .hero-card img{height:200px}
-
-            /* Hero Left: Margens e espaçamentos no mobile */
-            .hero-left {
-                padding-bottom: 20px;
-            }
-        }
-
-        /* MENU MOBILE (Sidebar) */
-        .mobile-menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(22, 50, 37, 0.95);
-            backdrop-filter: blur(8px);
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transform: translateX(100%);
-            transition: transform 0.4s ease-out;
-        }
-        .mobile-menu-overlay.open {
-            transform: translateX(0);
-        }
-        .mobile-menu-overlay a {
-            color: white;
-            font-size: 24px;
-            padding: 15px 0;
-            text-decoration: none;
-            font-weight: 700;
-        }
-        .close-mobile-menu {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* ANIMATIONS: subtle */
-        .reveal{opacity:0;transform:translateY(20px);transition:all .6s cubic-bezier(.2,.9,.2,1)}
-        .reveal.visible{opacity:1;transform:none}
-
-        /* Efeito de hover nas imagens da galeria */
-        .produto-item:hover img {
-            transform: scale(1.08);
-        }
-        .produto-item:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 30px rgba(30,94,255,0.2);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Vitaser ERP | Sistema Corporativo Completo + DAS</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: linear-gradient(145deg, #0a0f1a 0%, #050a12 100%);
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    color: #eef5ff;
+    padding: 24px 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1600px; margin: 0 auto; }
+  
+  .glass-panel {
+    background: rgba(12, 22, 40, 0.75);
+    backdrop-filter: blur(12px);
+    border-radius: 2rem;
+    border: 1px solid rgba(72, 200, 255, 0.2);
+    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+  }
+  .hero {
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.8rem;
+    background: linear-gradient(115deg, rgba(0, 40, 60, 0.7), rgba(0, 20, 40, 0.85));
+    border-bottom: 2px solid #2dd4bf;
+  }
+  .hero-flex {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+  .badge-neon {
+    background: rgba(45, 212, 191, 0.15);
+    color: #5eead4;
+    padding: 0.25rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+    border: 1px solid rgba(45,212,191,0.4);
+  }
+  h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    background: linear-gradient(120deg, #fff, #7dd3fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+  }
+  .stat-card {
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 1.5rem;
+    padding: 1rem 1.2rem;
+    border-left: 4px solid #2dd4bf;
+    transition: all 0.2s;
+  }
+  .stat-card:hover { background: rgba(45,212,191,0.1); transform: translateY(-3px); }
+  .stat-label { font-size: 0.7rem; text-transform: uppercase; color: #9ca8c9; }
+  .stat-number { font-size: 2rem; font-weight: 800; margin-top: 0.3rem; line-height: 1; }
+  
+  .menu-container {
+    margin-bottom: 1.8rem;
+    position: relative;
+  }
+  .menu-btn {
+    background: linear-gradient(95deg, #1e2a4a, #0f1a30);
+    border: 1px solid rgba(45,212,191,0.3);
+    padding: 0.9rem 2rem;
+    border-radius: 3rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .menu-btn:hover {
+    background: linear-gradient(95deg, #2a3a60, #1a2a48);
+    border-color: #2dd4bf;
+    transform: translateY(-2px);
+  }
+  .menu-btn i { font-size: 1.2rem; }
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: rgba(10, 20, 35, 0.98);
+    backdrop-filter: blur(16px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(45,212,191,0.3);
+    min-width: 260px;
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 0 20px 35px -10px rgba(0,0,0,0.5);
+    display: none;
+  }
+  .dropdown-menu.show { display: block; }
+  .dropdown-item {
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.15s;
+    color: #cbd5e6;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .dropdown-item:hover {
+    background: rgba(45,212,191,0.15);
+    color: #5eead4;
+    padding-left: 1.8rem;
+  }
+  .dropdown-item i { width: 24px; font-size: 1.1rem; }
+  .dropdown-item.active {
+    background: linear-gradient(95deg, #2dd4bf20, #0f766e20);
+    color: #2dd4bf;
+    border-left: 3px solid #2dd4bf;
+  }
+  .dropdown-divider {
+    height: 1px;
+    background: rgba(45,212,191,0.2);
+    margin: 6px 0;
+  }
+  .category-group {
+    padding: 8px 12px;
+    font-size: 0.7rem;
+    color: #5eead4;
+    letter-spacing: 1px;
+    background: rgba(45,212,191,0.1);
+  }
+  
+  .dual-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .card-form, .card-filters {
+    flex: 1;
+    background: rgba(8, 18, 32, 0.7);
+    backdrop-filter: blur(4px);
+    border-radius: 1.8rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(45,212,191,0.2);
+  }
+  .section-title {
+    border-left: 4px solid #2dd4bf;
+    padding-left: 0.8rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .grid-2 {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .input-field label { font-size: 0.7rem; font-weight: 600; color: #a5c1ff; letter-spacing: 0.5px; }
+  input, select, textarea {
+    background: #0a1120;
+    border: 1px solid #2a3a60;
+    border-radius: 1rem;
+    padding: 0.7rem 1rem;
+    color: white;
+    font-size: 0.85rem;
+    transition: 0.2s;
+  }
+  input:focus, select:focus { outline: none; border-color: #2dd4bf; box-shadow: 0 0 0 2px rgba(45,212,191,0.2); }
+  button {
+    border: none;
+    border-radius: 2rem;
+    padding: 0.7rem 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .btn-primary { background: linear-gradient(105deg, #2dd4bf, #14b8a6); color: #02100e; box-shadow: 0 6px 14px rgba(45,212,191,0.3); }
+  .btn-excel { background: linear-gradient(105deg, #2c7da0, #1f5e7a); color: white; }
+  .btn-danger { background: rgba(220, 70, 80, 0.9); color: white; }
+  .btn-ghost { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); }
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 1.5rem;
+    background: rgba(5, 12, 24, 0.8);
+    margin: 1.5rem 0;
+  }
+  .table-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1e2b44;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(10, 17, 32, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 3rem;
+    border: 1px solid rgba(45,212,191,0.2);
+    min-width: 280px;
+  }
+  .search-bar i { color: #5eead4; font-size: 1rem; }
+  .search-bar input {
+    background: transparent;
+    border: none;
+    padding: 0.6rem 0;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+  .search-bar input:focus { box-shadow: none; }
+  .search-bar input::placeholder { color: #5a6e8a; }
+  .clear-search {
+    background: none;
+    border: none;
+    color: #8a9ac0;
+    cursor: pointer;
+    padding: 0.3rem;
+    font-size: 0.9rem;
+  }
+  .clear-search:hover { color: #f87171; }
+  .date-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(10, 17, 32, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 3rem;
+    border: 1px solid rgba(45,212,191,0.2);
+  }
+  .date-filter-bar input {
+    background: transparent;
+    border: none;
+    padding: 0.6rem 0;
+    width: 140px;
+  }
+  .filter-badge {
+    background: rgba(45,212,191,0.15);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  th {
+    text-align: left;
+    padding: 0.9rem 1rem;
+    background: #0f1a2c;
+    color: #b9d6ff;
+  }
+  td {
+    padding: 0.8rem 1rem;
+    border-top: 1px solid #19253e;
+  }
+  tr:hover td { background: rgba(45,212,191,0.05); }
+  .money { color: #6ee7b7; font-weight: 700; }
+  .status-badge {
+    background: rgba(45,212,191,0.15);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .status-pago { background: #2dd4bf30; color: #6ee7b7; }
+  .status-vencido { background: #f8717130; color: #fca5a5; }
+  .status-aberto { background: #facc1530; color: #fcd34d; }
+  .cat-card {
+    background: rgba(12, 24, 40, 0.8);
+    border-radius: 1rem;
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+    border-left: 3px solid #2dd4bf;
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  .cat-card:hover { transform: translateX(6px); background: #1e2c48; }
+  .summary-area {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #030b16aa;
+    border-radius: 1.5rem;
+  }
+  .date-separator-row td {
+    background: rgba(45, 212, 191, 0.2);
+    border-top: 2px solid #2dd4bf;
+    border-bottom: 1px solid #2dd4bf;
+    padding: 0.5rem 1rem;
+    font-weight: 800;
+  }
+  .date-separator-cell {
+    background: linear-gradient(90deg, rgba(45,212,191,0.15), rgba(45,212,191,0.02));
+    color: #b2f5ea;
+    font-size: 0.9rem;
+  }
+  .no-results { text-align: center; padding: 3rem; color: #8a9ac0; }
+  @media (max-width: 780px) {
+    body { padding: 1rem; }
+    .stat-number { font-size: 1.4rem; }
+    .table-header { flex-direction: column; align-items: stretch; }
+    .search-bar { width: 100%; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <div class="container nav">
-            <a class="brand" href="#home" aria-label="DenverBrasil">
-                <span class="logo-mark">DB</span>
-                <div>
-                    <h1 style="font-size:14px;margin:0">DenverBrasil</h1>
-                    <div style="font-size:12px;color:var(--muted);margin-top:2px">Serralheria</div>
-                </div>
-            </a>
-
-            <nav>
-                <ul class="main-menu">
-                    <li><a href="#servicos">Serviços</a></li>
-                    <li><a href="#produtos">Galeria</a></li>
-                    <li><a href="#orcamento">Orçamento</a></li>
-                    <li><a href="#localizacao">Localização</a></li>
-                </ul>
-            </nav>
-
-            <div style="display:flex;gap:12px;align-items:center">
-                <a class="cta-header" href="#orcamento">Peça Orçamento</a>
-                <button class="menu-toggle" aria-label="Abrir Menu" onclick="toggleMenu()">☰</button>
-            </div>
-        </div>
-    </header>
-
-    <div class="mobile-menu-overlay" id="mobileMenu">
-        <button class="close-mobile-menu" aria-label="Fechar Menu" onclick="toggleMenu()">×</button>
-        <a href="#servicos" onclick="toggleMenu()">Serviços</a>
-        <a href="#produtos" onclick="toggleMenu()">Galeria</a>
-        <a href="#orcamento" onclick="toggleMenu()">Orçamento</a>
-        <a href="#localizacao" onclick="toggleMenu()">Localização</a>
-        <a class="btn-primary" href="#orcamento" style="margin-top:20px" onclick="toggleMenu()">Peça Orçamento</a>
+<div class="container">
+  <div class="hero glass-panel">
+    <div class="hero-flex">
+      <div>
+        <div class="badge-neon"><i class="fas fa-chart-line"></i> VITASER CONTROLE TOTAL + DAS</div>
+        <h1><i class="fas fa-hard-hat"></i> Gestão Integrada</h1>
+        <p style="color:#b9d0ff; margin-top: 6px;">Gastos, Obras, PIX, Faltas, DAS – inteligência completa</p>
+      </div>
+      <div style="background:#00000055; padding: 0.8rem 1.5rem; border-radius: 2rem;">
+        <i class="fas fa-database"></i> Total registros: <strong id="totalRegistrosSpan">0</strong>
+      </div>
     </div>
+    <div class="stat-grid" id="statsPanel"></div>
+  </div>
 
-    <main class="container">
-        <section class="hero" id="home">
-            <div class="hero-left">
-                <span class="kicker">Serralheria em BH</span>
-                <h2 class="headline">Soluções em <span style="color:#0b2f1a;font-weight:900">metal</span> para sua obra — <span class="typed" id="typed"></span></h2>
-                <p class="sub">Projetos sob medida: pergolados, coberturas, corrimãos e portões. Entrega rápida, instalação com garantia e acabamento premium.</p>
+  <div class="menu-container">
+    <button class="menu-btn" id="menuButton">
+      <i class="fas fa-bars"></i> 
+      <span id="currentTabLabel">📊 Resumo Geral</span>
+      <i class="fas fa-chevron-down"></i>
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu"></div>
+  </div>
 
-                <div class="hero-actions">
-                    <a class="btn-primary" href="#orcamento" id="ctaHero"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Solicitar Orçamento</a>
-                    <a class="btn-ghost" href="#produtos">Ver Portfólio</a>
-                </div>
-
-                <div class="benefits" aria-hidden="true">
-                    <div class="benefit"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 2l2.5 5L20 8l-4 3 1 6-5-3-5 3 1-6L4 8l5.5-.9L12 2z" fill="#1fb15a" /></svg><div style="font-size:13px"><strong>Acabamento Premium</strong><div style="color:var(--muted);font-size:12px">Pintura e montagem final</div></div></div>
-                    <div class="benefit"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M3 7h18M3 12h18M3 17h18" stroke="#1fb15a" stroke-width="1.6" stroke-linecap="round"/></svg><div style="font-size:13px"><strong>Projetos Rápidos</strong><div style="color:var(--muted);font-size:12px">Orçamento em 24h</div></div></div>
-                </div>
-            </div>
-
-            <div class="hero-right">
-                <div class="hero-card reveal" id="heroCard">
-                    <img src="images/20241031_153219.jpg" alt="Equipe instalando estrutura metálica" />
-                    <div class="overlay-cta">
-                        <div style="font-size:13px;font-weight:700;color:#0b4425">Trabalhos em destaque</div>
-                        <button onclick="showImages(5)">Ver fotos</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="container">
-                <div class="cta-bar reveal">
-                    <div>
-                        <strong style="font-size:16px">Pronto para transformar seu projeto?</strong>
-                        <div style="color:var(--muted);font-size:13px">Orçamento rápido, pagamento facilitado e garantia de serviço.</div>
-                    </div>
-                    <div style="display:flex;gap:10px;align-items:center">
-                        <a class="btn-primary" href="#orcamento">Peça Orçamento</a>
-                        <a class="btn-ghost" href="tel:+5531986985930">Ligar: (31) 98698-5930</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="servicos" class="section">
-            <div class="container reveal">
-                <div class="title">
-                    <h2>Serviços que oferecemos</h2>
-                    <div style="color:var(--muted);font-size:13px">Projetos personalizados e manutenção</div>
-                </div>
-
-                <div class="cards">
-                    <div class="card" onclick="showImages(1)" role="button" tabindex="0">
-                        <div style="display:flex;gap:14px;align-items:center">
-                            <div class="icon">P</div>
-                            <div>
-                                <h3>Platibanda</h3>
-                                <p>Estruturas elegantes e funcionais para áreas externas: metálicos, madeira ou mistos, com acabamento refinado.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card" onclick="showImages(2)" role="button" tabindex="0">
-                        <div style="display:flex;gap:14px;align-items:center">
-                            <div class="icon">C</div>
-                            <div>
-                                <h3>Cobertura</h3>
-                                <p>Coberturas metálicas e em policarbonato para residências, comércios e indústrias — proteção e estética.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card" onclick="showImages(3)" role="button" tabindex="0">
-                        <div style="display:flex;gap:14px;align-items:center">
-                            <div class="icon">C</div>
-                            <div>
-                                <h3>Corrimão</h3>
-                                <p>Corrimãos em inox, ferro ou alumínio, sendo seguros e com design moderno para escadas e rampas.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card" onclick="showImages(4)" role="button" tabindex="0">
-                        <div style="display:flex;gap:14px;align-items:center">
-                            <div class="icon">A</div>
-                            <div>
-                                <h3>Alambrado</h3>
-                                <p>Portões de correr, basculantes e de abrir — manuais ou automatizados — com pintura eletrostática.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="produtos" class="section reveal">
-            <div class="container">
-                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:25px">
-                    <h2 style="font-size:26px;color:var(--text);font-weight:800">Galeria de Projetos</h2>
-                    <p style="color:var(--muted);font-size:14px">Fotos reais de obras e instalações DenverBrasil</p>
-                </div>
-
-                <div class="gallery-grid" style="
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-                    gap: 20px;
-                ">
-                    <div class="produto-item" style="
-                        position: relative;
-                        overflow: hidden;
-                        border-radius: 14px;
-                        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-                        cursor: pointer;
-                        transition: transform 0.4s ease;
-                    " onclick="showImages(5)">
-                        <img src="images/pergolado1.jpg" alt="Projeto finalizado" style="width:100%;height:240px;object-fit:cover;transition:transform 0.5s ease;">
-                        <div style="
-                            position:absolute;
-                            inset:0;
-                            background:linear-gradient(to top, rgba(0,30,60,0.6), transparent 60%);
-                            display:flex;
-                            flex-direction:column;
-                            justify-content:flex-end;
-                            padding:18px;
-                            color:#fff;
-                        ">
-                            <h3 style="margin:0;font-size:18px;font-weight:700;">Ver Fotos da Obra</h3>
-                            <p style="margin-top:6px;font-size:14px;color:#dbe5f5;">Estruturas e acabamentos produzidos por nossa equipe.</p>
-                        </div>
-                    </div>
-
-                    <div class="produto-item" style="
-                        position: relative;
-                        overflow: hidden;
-                        border-radius: 14px;
-                        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-                        cursor: pointer;
-                        transition: transform 0.4s ease;
-                    " onclick="showImages(6)">
-                        <img src="images/20241015_153007.jpg" alt="Vídeo do projeto" style="width:100%;height:240px;object-fit:cover;transition:transform 0.5s ease;">
-                        <div style="
-                            position:absolute;
-                            inset:0;
-                            background:linear-gradient(to top, rgba(0,30,60,0.6), transparent 60%);
-                            display:flex;
-                            flex-direction:column;
-                            justify-content:flex-end;
-                            padding:18px;
-                            color:#fff;
-                        ">
-                            <h3 style="margin:0;font-size:18px;font-weight:700;">Outros Projetos</h3>
-                            <p style="margin-top:6px;font-size:14px;color:#dbe5f5;">Veja mais da nossa expertise e portfólio completo.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section reveal">
-            <div class="container">
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px">
-                    <h2>O que nossos clientes dizem</h2>
-                    <div style="color:var(--muted);font-size:13px">Confiança e qualidade comprovada</div>
-                </div>
-
-                <div class="testimonials">
-                    <div class="testimony card">
-                        <strong>Mariana S. — Arquitetura</strong>
-                        <p>"Profissionais pontuais e com acabamento impecável. Recomendo para projetos residenciais e comerciais."</p>
-                    </div>
-                    <div class="testimony card">
-                        <strong>Carlos M. — Construtora</strong>
-                        <p>"Entrega no prazo combinado e suporte técnico excelente. Equipe qualificada e organizada."</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="orcamento" class="section reveal">
-            <div class="container"> <div>
-                    <h2>Solicite seu orçamento — sem compromisso</h2>
-                    <p style="color:var(--muted);margin-top:8px">Nos diga o que precisa que retornamos com valor e prazo. Atendemos BH e região.</p>
-
-                    <ul style="margin-top:18px;color:var(--muted);font-size:14px;line-height:1.7">
-                        <li><strong>Orçamento ágil:</strong> resposta em até 24 horas</li>
-                        <li><strong>Medidas e projeto:</strong> fazemos visita técnica quando necessário</li>
-                        <li><strong>Garantia:</strong> garantia de serviço e acabamento</li>
-                    </ul>
-                </div>
-
-                <div class="lead-form">
-                    <form id="leadForm" onsubmit="return false" aria-label="Formulário de orçamento">
-                        <div class="field">
-                            <label for="nome">Seu Nome</label>
-                            <input id="nome" type="text" placeholder="Ex: João Silva" required />
-                        </div>
-                        <div class="field">
-                            <label for="telefone">Telefone / WhatsApp</label>
-                            <input id="telefone" type="text" placeholder="(31) 9xxxx-xxxx" required />
-                        </div>
-                        <div class="field">
-                            <label for="email">E-mail (Opcional)</label>
-                            <input id="email" type="email" placeholder="seu@email.com" />
-                        </div>
-                        <div class="field">
-                            <label for="mensagem">Descreva o Serviço que Precisa</label>
-                            <textarea id="mensagem" placeholder="Ex: Pergolado 5x3m, Corrimão em inox para escada..." required></textarea>
-                        </div>
-
-                        <div class="form-actions">
-                            <button class="btn-submit" onclick="sendLead()" type="submit">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v10"/><path d="M10 9l2-2 2 2"/></svg>
-                                Enviar Orçamento por WhatsApp
-                            </button>
-
-                        </div>
-                        <div id="formNote" style="color:var(--muted);font-size:13px;margin-top:10px;text-align:center;">Envie o formulário para abrir o WhatsApp automaticamente.</div>
-                    </form>
-                </div>
-                </div>
-        </section>
-
-        <section id="localizacao" class="section reveal">
-            <div class="container">
-                <h2>Localização</h2>
-                <p style="color:var(--muted)">Atendemos Belo Horizonte e região — venha nos visitar ou solicite visita técnica.</p>
-
-                <div style="margin-top:18px;display:flex;justify-content:center">
-                    <iframe class="map-iframe" src="https://maps.google.com/maps?width=100%25&height=600&hl=pt&q=Rua%20Paulo%20Kruger%20Mour%C3%A3o,%20Belo%20Horizonte+(DenverBrasil)&t=&z=14&ie=UTF8&iwloc=B&output=embed" style="border:0;width:100%;max-width:900px;height:380px;border-radius:12px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div class="images-container" id="imagesContainer" aria-hidden="true">
-        <div class="images-gallery" id="imagesGallery" role="dialog" aria-label="Galeria de imagens"></div>
-        <div style="margin-top:16px">
-            <button class="close-btn" onclick="hideImages()">Fechar</button>
-        </div>
+  <div class="dual-layout">
+    <div class="card-form">
+      <div class="section-title">
+        <h3 id="formTitle"><i class="fas fa-plus-circle"></i> Novo lançamento</h3>
+        <small id="formSub" style="color:#8ba3cf;">Preencha os campos</small>
+      </div>
+      <div id="formFields" class="grid-2"></div>
+      <div style="display: flex; gap: 12px; margin-top: 1.4rem; flex-wrap: wrap;">
+        <button id="btnAdd" class="btn-primary"><i class="fas fa-save"></i> Adicionar</button>
+        <button id="btnExport" class="btn-excel"><i class="fas fa-file-excel"></i> Exportar Excel</button>
+        <button id="btnImport" class="btn-ghost"><i class="fas fa-upload"></i> Importar Planilha</button>
+        <button id="btnDeleteAll" class="btn-danger"><i class="fas fa-trash"></i> Limpar tudo</button>
+      </div>
     </div>
+    <div class="card-filters">
+      <div class="section-title">
+        <h3><i class="fas fa-chart-pie"></i> Análise de Categorias</h3>
+      </div>
+      <div id="categoryInsight" style="max-height: 400px; overflow-y: auto;"></div>
+    </div>
+  </div>
 
-    <a class="whatsapp-float" href="https://wa.me/5531986985930" target="_blank" aria-label="Fale conosco no WhatsApp">💬</a>
-
-    <footer>
-        <div class="container">
-            <div style="display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center">
-                <div style="font-weight:700">Serralheria DenverBrasil</div>
-                <div style="color:var(--muted)">Rua Paulo Kruger Mourão — Belo Horizonte </div>
-                <div style="color:var(--muted);font-size:13px;margin-top:8px">© 2025 DenverBrasil — Todos os direitos reservados</div>
-            </div>
+  <div class="table-wrapper">
+    <div class="table-header">
+      <div><strong id="tableTitle"></strong> <span id="tableDetail" style="font-size: 0.7rem;">(<span id="rowCount">0</span> registros)</span></div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="liveSearchInput" placeholder="Buscar em tempo real..." autocomplete="off">
+          <button class="clear-search" id="clearSearchBtn" title="Limpar busca"><i class="fas fa-times-circle"></i></button>
         </div>
-    </footer>
+        <div class="date-filter-bar">
+          <i class="fas fa-calendar-alt"></i>
+          <input type="date" id="liveDateFilter">
+          <button class="clear-search" id="clearDateBtn" title="Limpar data"><i class="fas fa-eraser"></i></button>
+        </div>
+        <div class="filter-actions">
+          <span id="filterStatusBadge" class="filter-badge" style="display: none;"></span>
+        </div>
+      </div>
+    </div>
+    <div style="overflow-x: auto;">
+      <table id="dataTable">
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<input type="file" id="fileUploadExcel" accept=".xlsx, .xls, .csv" style="display: none;">
 
-    <script>
-        /* ---------- MENU MOBILE TOGGLE (Novo) ---------- */
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('open');
-            document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+<script>
+  // DADOS TOTALMENTE LIMPOS
+  let db = {
+    gastos: [],
+    obra: [],
+    pix: [],
+    faltas: [],
+    das: [],
+    pendencias: [],
+    caixa: []
+  };
+  
+  let currentTab = "resumo";
+  let liveSearchTerm = "";
+  let liveDateFilter = "";
+  
+  const fieldLabels = {
+    data: "Data", categoria: "Categoria", descricao: "Descrição", valor: "Valor (R$)", obs: "Observações",
+    cliente: "Cliente", servico: "Serviço", veiculo: "Veículo", motorista: "Motorista", responsavel: "Responsável",
+    status: "Status", nome: "Nome", pix: "Chave PIX", instituicao: "Instituição", cargo: "Cargo",
+    nomeColab: "Nome", contaGov: "Conta Gov.br", meiStatus: "MEI Status", cnpj: "CNPJ", pagamentoStatus: "Pagamento Status", statusGeral: "STATUS",
+    hora: "Hora", remetente: "Remetente", tipo: "Tipo", obraCliente: "Obra/Cliente", origem: "Origem", saldo: "Saldo", entrada: "Entrada", saida: "Saida"
+  };
+  
+  const schemas = {
+    gastos: ["data", "categoria", "descricao", "valor", "obs"],
+    obra: ["cliente", "servico", "veiculo", "motorista", "responsavel", "status", "data"],
+    pix: ["nome", "pix", "instituicao"],
+    faltas: ["nome", "cargo", "data"],
+    das: ["nomeColab", "contaGov", "meiStatus", "cnpj", "pagamentoStatus", "statusGeral"],
+    pendencias: ["data", "hora", "remetente", "categoria", "obraCliente", "valor", "descricao", "obs"],
+    caixa: ["data", "hora", "remetente", "tipo", "valor", "descricao", "saldo"]
+  };
+  
+  let categoriesMasterSet = new Set(["Gasolina","Insumos","Imprevistos","Material","Transporte","Contabilidade","Outros"]);
+  
+  const tabIcons = {
+    pendencias: "Pendencias",
+    caixa: "Caixa",
+    gastos: "💰 Gastos",
+    obra: "🏗️ Obras",
+    pix: "💳 PIX",
+    faltas: "📅 Faltas",
+    das: "📄 DAS",
+    resumo: "📊 Resumo Geral"
+  };
+  
+  function parseMoney(valor) {
+    if (valor === null || valor === undefined || valor === "") return 0;
+    if (typeof valor === 'number') return isNaN(valor) ? 0 : valor;
+    let str = String(valor).trim().replace(/R\$\s?/g, '').replace(/\s/g, '');
+    if(str.includes(',') && str.includes('.')) str = str.replace(/\./g, '').replace(',', '.');
+    else if(str.includes(',')) str = str.replace(',', '.');
+    str = str.replace(/[^\d.-]/g, '');
+    let num = parseFloat(str);
+    return isNaN(num) ? 0 : num;
+  }
+  
+  function formatMoney(v) { 
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseMoney(v)); 
+  }
+  
+  function formatDateBR(d) { 
+    if(!d) return ''; 
+    let parts = d.split('-'); 
+    if(parts.length===3) return `${parts[2]}/${parts[1]}/${parts[0]}`; 
+    return d; 
+  }
+  
+  function escapeHtml(s) { 
+    if(!s) return ''; 
+    return String(s).replace(/[&<>]/g, function(c){ 
+      if(c==='&') return '&amp;'; 
+      if(c==='<') return '&lt;'; 
+      if(c==='>') return '&gt;'; 
+      return c;
+    }); 
+  }
+  
+  function loadFromStorage() {
+    const stored = localStorage.getItem("vitaser_erp_clean");
+    if(stored) {
+      try {
+        let parsed = JSON.parse(stored);
+        if(parsed.gastos) db = parsed;
+      } catch(e) {}
+    }
+    db.gastos = Array.isArray(db.gastos) ? db.gastos : [];
+    db.obra = Array.isArray(db.obra) ? db.obra : [];
+    db.pix = Array.isArray(db.pix) ? db.pix : [];
+    db.faltas = Array.isArray(db.faltas) ? db.faltas : [];
+    db.das = Array.isArray(db.das) ? db.das : [];
+    db.pendencias = Array.isArray(db.pendencias) ? db.pendencias : [];
+    db.caixa = Array.isArray(db.caixa) ? db.caixa : [];
+    sortCollections();
+  }
+  
+  function sortCollections() {
+    if(db.gastos) db.gastos.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(db.obra) db.obra.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(db.faltas) db.faltas.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(db.pendencias) db.pendencias.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(db.caixa) db.caixa.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  }
+  
+  function save() { 
+    localStorage.setItem("vitaser_erp_clean", JSON.stringify(db)); 
+  }
+  
+  function updateCategories() { 
+    if(db.gastos) db.gastos.forEach(g => { if(g.categoria) categoriesMasterSet.add(g.categoria); }); 
+  }
+  
+  function isCategoryTab() { return currentTab && currentTab.startsWith("cat:"); }
+  function getCategoryFromTab() { return isCategoryTab() ? currentTab.substring(4) : null; }
+  
+  function getTabDisplayName() {
+    if(isCategoryTab()) return `📁 ${getCategoryFromTab()}`;
+    return tabIcons[currentTab] || currentTab;
+  }
+  
+  function getDataSourceName() {
+    if(isCategoryTab()) return "gastos";
+    if(currentTab === "gastos" || currentTab === "obra" || currentTab === "pix" || currentTab === "faltas" || currentTab === "das" || currentTab === "pendencias" || currentTab === "caixa") {
+      return currentTab;
+    }
+    return null;
+  }
+  
+  function renderMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    let itemsHtml = `
+      <div class="dropdown-item ${currentTab === 'resumo' ? 'active' : ''}" data-tab="resumo">
+        <i class="fas fa-chart-simple"></i> 📊 Resumo Geral
+      </div>
+      <div class="dropdown-divider"></div>
+      <div class="dropdown-item ${currentTab === 'gastos' ? 'active' : ''}" data-tab="gastos">
+        <i class="fas fa-credit-card"></i> 💰 Gastos
+      </div>
+      <div class="dropdown-item ${currentTab === 'obra' ? 'active' : ''}" data-tab="obra">
+        <i class="fas fa-hard-hat"></i> 🏗️ Obras
+      </div>
+      <div class="dropdown-item ${currentTab === 'pix' ? 'active' : ''}" data-tab="pix">
+        <i class="fas fa-barcode"></i> 💳 PIX
+      </div>
+      <div class="dropdown-item ${currentTab === 'faltas' ? 'active' : ''}" data-tab="faltas">
+        <i class="fas fa-calendar-times"></i> 📅 Faltas
+      </div>
+      <div class="dropdown-item ${currentTab === 'das' ? 'active' : ''}" data-tab="das">
+        <i class="fas fa-file-invoice-dollar"></i> 📄 DAS
+      </div>
+    `;
+    
+    itemsHtml += `
+      <div class="dropdown-item ${currentTab === 'pendencias' ? 'active' : ''}" data-tab="pendencias">
+        <i class="fas fa-triangle-exclamation"></i> Pendencias
+      </div>
+      <div class="dropdown-item ${currentTab === 'caixa' ? 'active' : ''}" data-tab="caixa">
+        <i class="fas fa-cash-register"></i> Caixa
+      </div>
+    `;
+
+    if(categoriesMasterSet.size > 0) {
+      itemsHtml += `<div class="dropdown-divider"></div>`;
+      itemsHtml += `<div class="category-group"><i class="fas fa-tags"></i> CATEGORIAS DE GASTOS</div>`;
+      Array.from(categoriesMasterSet).sort().forEach(cat => {
+        const tabId = `cat:${cat}`;
+        itemsHtml += `<div class="dropdown-item ${currentTab === tabId ? 'active' : ''}" data-tab="${tabId.replace(/"/g, '&quot;')}">
+          <i class="fas fa-tag"></i> 📁 ${escapeHtml(cat)}
+        </div>`;
+      });
+    }
+    
+    menu.innerHTML = itemsHtml;
+    
+    document.querySelectorAll(".dropdown-item").forEach(item => {
+      item.removeEventListener("click", handleDropdownClick);
+      item.addEventListener("click", handleDropdownClick);
+    });
+  }
+  
+  function handleDropdownClick(e) {
+    const tab = e.currentTarget.dataset.tab;
+    if(tab) {
+      currentTab = tab;
+      document.getElementById("currentTabLabel").innerHTML = getTabDisplayName();
+      document.getElementById("dropdownMenu").classList.remove("show");
+      renderAll();
+    }
+  }
+  
+  function renderAll() {
+    updateCategories();
+    renderMenu();
+    renderStats();
+    renderCategoryAnalysis();
+    renderForm();
+    renderTable();
+    document.getElementById("currentTabLabel").innerHTML = getTabDisplayName();
+    
+    const searchInput = document.getElementById("liveSearchInput");
+    if(searchInput) searchInput.value = liveSearchTerm;
+    const dateInput = document.getElementById("liveDateFilter");
+    if(dateInput) dateInput.value = liveDateFilter;
+    updateFilterBadge();
+  }
+  
+  function updateFilterBadge() {
+    const badge = document.getElementById("filterStatusBadge");
+    if(liveSearchTerm || liveDateFilter) {
+      let text = "";
+      if(liveSearchTerm) text += `🔍 "${liveSearchTerm.substring(0,20)}"`;
+      if(liveDateFilter) text += `${text ? " • " : ""}📅 ${formatDateBR(liveDateFilter)}`;
+      badge.innerHTML = `<i class="fas fa-filter"></i> ${text} <button style="background:none; border:none; color:inherit; margin-left:6px; cursor:pointer;" onclick="window.clearAllFilters()">✕</button>`;
+      badge.style.display = "inline-flex";
+    } else {
+      badge.style.display = "none";
+    }
+  }
+  
+  window.clearAllFilters = function() {
+    liveSearchTerm = "";
+    liveDateFilter = "";
+    const searchInput = document.getElementById("liveSearchInput");
+    if(searchInput) searchInput.value = "";
+    const dateInput = document.getElementById("liveDateFilter");
+    if(dateInput) dateInput.value = "";
+    renderTable();
+    updateFilterBadge();
+  };
+  
+  function renderStats() {
+    let totalGastos = db.gastos.reduce((acc,g) => acc + parseMoney(g.valor), 0);
+    let obrasAtivas = db.obra.filter(o => o.status === "Em Andamento").length;
+    let totalRegistros = db.gastos.length + db.obra.length + db.pix.length + db.faltas.length + db.das.length + db.pendencias.length + db.caixa.length;
+    document.getElementById("totalRegistrosSpan").innerHTML = totalRegistros;
+    document.getElementById("statsPanel").innerHTML = `
+      <div class="stat-card"><div class="stat-label">💰 Gastos totais</div><div class="stat-number">${formatMoney(totalGastos)}</div></div>
+      <div class="stat-card"><div class="stat-label">🏗️ Obras ativas</div><div class="stat-number">${obrasAtivas}</div></div>
+      <div class="stat-card"><div class="stat-label">💳 Chaves PIX</div><div class="stat-number">${db.pix.length}</div></div>
+      <div class="stat-card"><div class="stat-label">📅 Faltas RH</div><div class="stat-number">${db.faltas.length}</div></div>
+      <div class="stat-card"><div class="stat-label">📄 DAS Registros</div><div class="stat-number">${db.das.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Pendencias importadas</div><div class="stat-number">${db.pendencias.length}</div></div>
+    `;
+  }
+  
+  function renderCategoryAnalysis() {
+    let catTotals = {};
+    db.gastos.forEach(g => { let c = g.categoria || "Outros"; catTotals[c] = (catTotals[c] || 0) + parseMoney(g.valor); });
+    let totalAll = Object.values(catTotals).reduce((a,b)=>a+b,0);
+    let container = document.getElementById("categoryInsight");
+    if(Object.keys(catTotals).length === 0) { 
+      container.innerHTML = "<div style='padding:1rem; text-align:center;'>Nenhum gasto cadastrado ainda.<br>Clique em Gastos e adicione os primeiros registros.</div>"; 
+      return; 
+    }
+    let html = "";
+    for(let [cat, val] of Object.entries(catTotals).sort((a,b)=>b[1]-a[1])) {
+      let percent = totalAll > 0 ? (val/totalAll)*100 : 0;
+      html += `<div class="cat-card" onclick="window.changeToCategory('${cat.replace(/'/g, "\\'")}')"><div style="display:flex; justify-content:space-between;"><strong>${escapeHtml(cat)}</strong><span class="money">${formatMoney(val)}</span></div><div style="font-size:0.7rem;">${percent.toFixed(1)}% do total</div><div style="background:#1f2c46; border-radius:8px; margin-top:6px;"><div style="width:${percent}%; height:4px; background:#2dd4bf; border-radius:8px;"></div></div></div>`;
+    }
+    container.innerHTML = html;
+  }
+  
+  window.changeToCategory = function(cat) {
+    currentTab = `cat:${cat}`;
+    document.getElementById("currentTabLabel").innerHTML = `📁 ${cat}`;
+    renderAll();
+  };
+  
+  function renderForm() {
+    if(currentTab === "resumo") {
+      document.getElementById("formTitle").innerHTML = "<i class='fas fa-chart-line'></i> Visão Consolidada";
+      document.getElementById("formSub").innerHTML = "Totais financeiros gerais";
+      document.getElementById("formFields").innerHTML = `
+        <div class="input-field"><label>Total gastos</label><input value="${formatMoney(db.gastos.reduce((a,g)=>a+parseMoney(g.valor),0))}" disabled></div>
+        <div class="input-field"><label>Qtd Obras Ativas</label><input value="${db.obra.filter(o=>o.status==='Em Andamento').length}" disabled></div>
+        <div class="input-field"><label>Total DAS Registros</label><input value="${db.das.length}" disabled></div>
+      `;
+      return;
+    }
+    
+    if(currentTab === "pendencias" || currentTab === "caixa") {
+      document.getElementById("formTitle").innerHTML = currentTab === "pendencias" ? "<i class='fas fa-triangle-exclamation'></i> Pendencias" : "<i class='fas fa-cash-register'></i> Caixa";
+      document.getElementById("formSub").innerHTML = "Registros importados da planilha";
+      document.getElementById("formFields").innerHTML = `
+        <div class="input-field"><label>Registros</label><input value="${db[currentTab].length}" disabled></div>
+        <div class="input-field"><label>Total</label><input value="${formatMoney(db[currentTab].reduce((a,g)=>a+parseMoney(g.valor),0))}" disabled></div>
+        <div class="input-field"><label>Como alimentar</label><input value="Use Importar Planilha" disabled></div>
+      `;
+      return;
+    }
+
+    if(currentTab === "das") {
+      document.getElementById("formTitle").innerHTML = "<i class='fas fa-file-invoice-dollar'></i> Informações DAS";
+      document.getElementById("formSub").innerHTML = "Cadastro de MEI e status";
+      document.getElementById("formFields").innerHTML = `
+        <div class="input-field"><label>Nome</label><input type="text" id="field_nomeColab" placeholder="Nome completo"></div>
+        <div class="input-field"><label>Conta Gov.br</label><input type="text" id="field_contaGov" placeholder="Finalizado / Pendente"></div>
+        <div class="input-field"><label>MEI Status</label><input type="text" id="field_meiStatus" placeholder="Finalizado / Aberto / Parcelado"></div>
+        <div class="input-field"><label>CNPJ</label><input type="text" id="field_cnpj" placeholder="00.000.000/0001-00"></div>
+        <div class="input-field"><label>Pagamento Status</label><input type="text" id="field_pagamentoStatus" placeholder="Vencido / Aberto / Legal"></div>
+        <div class="input-field"><label>STATUS</label><input type="text" id="field_statusGeral" placeholder="Aberto / ..."></div>
+      `;
+      return;
+    }
+    
+    let isCat = isCategoryTab();
+    let catFixed = getCategoryFromTab();
+    let schema = isCat ? schemas.gastos : (schemas[currentTab] || schemas.gastos);
+    let fieldsHtml = "";
+    for(let field of schema) {
+      if(field === "categoria" && isCat) {
+        fieldsHtml += `<div class="input-field"><label>Categoria (fixa)</label><input type="text" value="${escapeHtml(catFixed)}" disabled style="background:#1e2a44;"></div>`;
+      } else if(field === "categoria") {
+        let opts = Array.from(categoriesMasterSet).map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        fieldsHtml += `<div class="input-field"><label>Categoria</label><select id="field_categoria">${opts}</select></div>`;
+      } else if(field === "status") {
+        fieldsHtml += `<div class="input-field"><label>Status</label><select id="field_status"><option>Em Andamento</option><option>Concluida</option><option>Cancelada</option></select></div>`;
+      } else if(field === "data") {
+        fieldsHtml += `<div class="input-field"><label>Data</label><input type="date" id="field_data" value="${new Date().toISOString().slice(0,10)}"></div>`;
+      } else if(field === "valor") {
+        fieldsHtml += `<div class="input-field"><label>Valor (R$)</label><input type="text" id="field_valor" placeholder="Ex: 103,40" value=""></div>`;
+      } else {
+        fieldsHtml += `<div class="input-field"><label>${fieldLabels[field]||field}</label><input type="text" id="field_${field}" placeholder="${fieldLabels[field]||field}"></div>`;
+      }
+    }
+    document.getElementById("formFields").innerHTML = fieldsHtml;
+    document.getElementById("formTitle").innerHTML = isCat ? `<i class="fas fa-tag"></i> Adicionar gasto (${catFixed})` : `<i class="fas fa-plus"></i> Novo ${currentTab === "gastos" ? "gasto" : currentTab}`;
+  }
+  
+  function getFilteredData() {
+    if(currentTab === "resumo") return [];
+    if(currentTab === "das") {
+      let data = [...db.das];
+      if(liveSearchTerm) {
+        const searchLower = liveSearchTerm.toLowerCase();
+        data = data.filter(item => Object.values(item).some(v => String(v).toLowerCase().includes(searchLower)));
+      }
+      return data;
+    }
+    
+    let dataSource = [];
+    if(isCategoryTab()) {
+      dataSource = db.gastos.filter(g => (g.categoria || "Outros") === getCategoryFromTab());
+    } else if(currentTab === "gastos" || currentTab === "obra" || currentTab === "pix" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa") {
+      dataSource = [...db[currentTab]];
+    }
+    
+    if(liveSearchTerm) {
+      const searchLower = liveSearchTerm.toLowerCase();
+      dataSource = dataSource.filter(item => {
+        return Object.values(item).some(v => String(v).toLowerCase().includes(searchLower));
+      });
+    }
+    
+    if(liveDateFilter && (currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa" || isCategoryTab())) {
+      dataSource = dataSource.filter(item => item.data === liveDateFilter);
+    }
+    
+    return dataSource;
+  }
+  
+  function renderTable() {
+    if(currentTab === "resumo") {
+      let catTot = {};
+      db.gastos.forEach(g => { let c = g.categoria || "Outros"; catTot[c] = (catTot[c] || 0) + parseMoney(g.valor); });
+      document.getElementById("thead").innerHTML = "<tr><th>Categoria</th><th>Valor Total</th></tr>";
+      let rows = "";
+      for(let [c,val] of Object.entries(catTot)) rows += `<tr><td style="font-weight:600;">${escapeHtml(c)}</td><td class="money">${formatMoney(val)}</td></tr>`;
+      document.getElementById("tbody").innerHTML = rows || "<tr><td colspan='2' class='no-results'>Nenhum dado cadastrado</td></tr>";
+      document.getElementById("tableTitle").innerHTML = "Resumo por Categoria";
+      document.getElementById("rowCount").innerHTML = Object.keys(catTot).length;
+      return;
+    }
+    
+    if(currentTab === "das") {
+      let schema = schemas.das;
+      let filteredData = getFilteredData();
+      document.getElementById("thead").innerHTML = `<tr>${schema.map(f => `<th>${fieldLabels[f]||f}</th>`).join('')}<th>Ações</th></tr>`;
+      let tbodyHtml = "";
+      if(filteredData.length === 0) {
+        tbodyHtml = `<tr><td colspan="${schema.length+1}" class="no-results">Nenhum registro encontrado</td></tr>`;
+      } else {
+        for(let i = 0; i < filteredData.length; i++) {
+          let item = filteredData[i];
+          let originalIdx = db.das.findIndex(d => d === item);
+          tbodyHtml += "<tr>";
+          for(let f of schema) {
+            let val = item[f] || "";
+            if(f === "pagamentoStatus" && val.toLowerCase().includes("vencido")) val = `<span class="status-badge status-vencido">${escapeHtml(val)}</span>`;
+            else if(f === "meiStatus" && val === "Finalizado") val = `<span class="status-badge status-pago">${escapeHtml(val)}</span>`;
+            else if(f === "meiStatus" && val === "Aberto") val = `<span class="status-badge status-aberto">${escapeHtml(val)}</span>`;
+            else val = escapeHtml(val);
+            tbodyHtml += `<td>${val}</td>`;
+          }
+          tbodyHtml += `<td><button class="btn-ghost" style="background:#c2413c30; padding:0.4rem 0.8rem;" onclick="window.deleteDasItem(${originalIdx})"><i class="fas fa-trash"></i></button></td>`;
+          tbodyHtml += "</tr>";
         }
+      }
+      document.getElementById("tbody").innerHTML = tbodyHtml;
+      document.getElementById("tableTitle").innerHTML = "📄 DAS - MEI e Pagamentos";
+      document.getElementById("rowCount").innerHTML = filteredData.length;
+      return;
+    }
+    
+    let filteredData = getFilteredData();
+    let schema = isCategoryTab() ? schemas.gastos : (schemas[currentTab] || []);
+    if(!schema.length) return;
+    
+    if(currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa") {
+      filteredData.sort((a,b)=> (b.data || '').localeCompare(a.data || ''));
+    }
+    
+    document.getElementById("thead").innerHTML = `<tr>${schema.map(f => `<th>${fieldLabels[f]||f}</th>`).join('')}<th>Ações</th></tr>`;
+    let tbodyHtml = "";
+    let lastDate = null;
+    
+    if(filteredData.length === 0) {
+      tbodyHtml = `<tr><td colspan="${schema.length+1}" class="no-results">🔍 Nenhum registro encontrado</td></tr>`;
+    } else {
+      for(let i = 0; i < filteredData.length; i++) {
+        const item = filteredData[i];
+        let originalIdx = db[getDataSourceName()]?.findIndex(d => d === item) ?? i;
+        const currentDate = item.data || "Sem data";
+        
+        if(currentDate !== lastDate && (currentTab === "gastos" || currentTab === "obra" || currentTab === "faltas" || currentTab === "pendencias" || currentTab === "caixa") && !liveSearchTerm && !liveDateFilter) {
+          tbodyHtml += `<tr class="date-separator-row"><td colspan="${schema.length+1}" class="date-separator-cell"><i class="fas fa-calendar-alt"></i> 📅 ${formatDateBR(currentDate)}</td></tr>`;
+          lastDate = currentDate;
+        }
+        
+        tbodyHtml += "<tr>";
+        for(let f of schema) {
+          let val = item[f] ?? "";
+          if(f === "valor" || f === "saldo" || f === "entrada" || f === "saida") val = `<span class="money">${formatMoney(parseMoney(val))}</span>`;
+          else if(f === "data") val = `<i class="far fa-calendar"></i> ${formatDateBR(val)}`;
+          else if(f === "status") val = `<span class="status-badge">${escapeHtml(val)}</span>`;
+          else val = escapeHtml(val);
+          tbodyHtml += `<td>${val}</td>`;
+        }
+        tbodyHtml += `<td><button class="btn-ghost" style="background:#c2413c30; padding:0.4rem 0.8rem;" onclick="window.deleteItem('${getDataSourceName()}', ${originalIdx})"><i class="fas fa-trash"></i></button></td>`;
+        tbodyHtml += "</tr>";
+      }
+    }
+    
+    document.getElementById("tbody").innerHTML = tbodyHtml;
+    document.getElementById("tableTitle").innerHTML = isCategoryTab() ? `Categoria: ${getCategoryFromTab()}` : `${currentTab.toUpperCase()} registros`;
+    document.getElementById("rowCount").innerHTML = filteredData.length;
+  }
+  
+  window.deleteDasItem = function(idx) {
+    if(confirm("Remover registro DAS?")) {
+      db.das.splice(idx, 1);
+      save();
+      renderAll();
+    }
+  };
+  
+  window.deleteItem = function(tab, idx) {
+    if(!confirm("Remover permanentemente?")) return;
+    if(db[tab] && idx >= 0 && idx < db[tab].length) {
+      db[tab].splice(idx, 1);
+      save();
+      renderAll();
+    }
+  };
+  
+  function addRecord() {
+    if(currentTab === "resumo") return;
+    if(currentTab === "pendencias" || currentTab === "caixa") {
+      alert("Pendencias e Caixa entram pela importacao da planilha.");
+      return;
+    }
+    
+    if(currentTab === "das") {
+      let newDas = {
+        nomeColab: document.getElementById("field_nomeColab")?.value || "",
+        contaGov: document.getElementById("field_contaGov")?.value || "",
+        meiStatus: document.getElementById("field_meiStatus")?.value || "",
+        cnpj: document.getElementById("field_cnpj")?.value || "",
+        pagamentoStatus: document.getElementById("field_pagamentoStatus")?.value || "",
+        statusGeral: document.getElementById("field_statusGeral")?.value || ""
+      };
+      db.das.push(newDas);
+      save();
+      renderAll();
+      return;
+    }
+    
+    let isCat = isCategoryTab();
+    let catFixed = getCategoryFromTab();
+    
+    if(isCat || currentTab === "gastos") {
+      let newGasto = {
+        data: document.getElementById("field_data")?.value || new Date().toISOString().slice(0,10),
+        categoria: isCat ? catFixed : (document.getElementById("field_categoria")?.value || ""),
+        descricao: document.getElementById("field_descricao")?.value || "",
+        valor: parseMoney(document.getElementById("field_valor")?.value || "0"),
+        obs: document.getElementById("field_obs")?.value || ""
+      };
+      if(newGasto.categoria && !categoriesMasterSet.has(newGasto.categoria)) {
+        categoriesMasterSet.add(newGasto.categoria);
+      }
+      db.gastos.push(newGasto);
+    } else if(currentTab === "obra") {
+      db.obra.push({
+        cliente: document.getElementById("field_cliente")?.value || "",
+        servico: document.getElementById("field_servico")?.value || "",
+        veiculo: document.getElementById("field_veiculo")?.value || "",
+        motorista: document.getElementById("field_motorista")?.value || "",
+        responsavel: document.getElementById("field_responsavel")?.value || "",
+        status: document.getElementById("field_status")?.value || "Em Andamento",
+        data: document.getElementById("field_data")?.value || new Date().toISOString().slice(0,10)
+      });
+    } else if(currentTab === "pix") {
+      db.pix.push({
+        nome: document.getElementById("field_nome")?.value || "",
+        pix: document.getElementById("field_pix")?.value || "",
+        instituicao: document.getElementById("field_instituicao")?.value || ""
+      });
+    } else if(currentTab === "faltas") {
+      db.faltas.push({
+        nome: document.getElementById("field_nome")?.value || "",
+        cargo: document.getElementById("field_cargo")?.value || "",
+        data: document.getElementById("field_data")?.value || new Date().toISOString().slice(0,10)
+      });
+    }
+    
+    sortCollections();
+    save();
+    renderAll();
+  }
+  
+  function exportExcel() {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.gastos), "Gastos");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.obra), "Obras");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.pix), "PIX");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.faltas), "Faltas");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.das), "DAS");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.pendencias), "Pendencias");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(db.caixa), "Caixa");
+    XLSX.writeFile(wb, `vitaser_completo_${new Date().toISOString().slice(0,19)}.xlsx`);
+  }
+  
+  function deleteAll() {
+    if(confirm("⚠️ ATENÇÃO: Apagar TODOS os registros? Irreversível!")) {
+      db = { gastos: [], obra: [], pix: [], faltas: [], das: [], pendencias: [], caixa: [] };
+      save();
+      renderAll();
+    }
+  }
+  
+  function normalizeTextKey(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/Ã§/gi, "c")
+      .replace(/Ã£|Ã¡|Ã¢|Ã /gi, "a")
+      .replace(/Ã©|Ãª/gi, "e")
+      .replace(/Ã­/gi, "i")
+      .replace(/Ã³|Ã´/gi, "o")
+      .replace(/Ãº/gi, "u")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
 
-        /* ---------- TYPING EFFECT (hero) ---------- */
-        (function(){
-            const phrases = ["Pergolados", "Coberturas", "Corrimãos", "Portões", "Escadas", "Guarda-corpo","Fachadas",];
-            let idxPhrase = 0;
-            let idxChar = 0;
-            const el = document.getElementById('typed');
-            let forward = true;
-            function tick(){
-                const current = phrases[idxPhrase];
-                if(forward){
-                    idxChar++;
-                    if(idxChar > current.length){ forward=false; setTimeout(tick,900); return; }
-                } else {
-                    idxChar--;
-                    if(idxChar === 0){ forward=true; idxPhrase=(idxPhrase+1)%phrases.length; setTimeout(tick,300); return; }
-                }
-                el.textContent = current.slice(0, idxChar);
-                setTimeout(tick, forward?60:30);
-            }
-            tick();
-        })();
+  function normalizeDate(value) {
+    if(!value) return "";
+    if(value instanceof Date && !isNaN(value)) return value.toISOString().slice(0,10);
+    if(typeof value === "number") {
+      const parsed = XLSX.SSF.parse_date_code(value);
+      if(parsed) return `${parsed.y}-${String(parsed.m).padStart(2,"0")}-${String(parsed.d).padStart(2,"0")}`;
+    }
+    const s = String(value).trim();
+    let m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+    m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m) return `${m[1]}-${m[2]}-${m[3]}`;
+    return s;
+  }
 
-        /* ---------- SCROLL REVEAL ---------- */
-        (function(){
-            const revealEls = document.querySelectorAll('.reveal');
-            const io = new IntersectionObserver((entries)=>{
-                entries.forEach(e=>{
-                    if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
-                });
-            }, {threshold:0.12});
-            revealEls.forEach(el=>io.observe(el));
-        })();
+  function getRowValue(row, aliases) {
+    const keys = Object.keys(row);
+    for(const alias of aliases) {
+      const wanted = normalizeTextKey(alias);
+      const key = keys.find(k => normalizeTextKey(k) === wanted || normalizeTextKey(k).includes(wanted));
+      if(key !== undefined) return row[key];
+    }
+    return "";
+  }
 
-        /* ---------- HERO BANNER ROTATION (background) ---------- */
-        (function(){
-            const banner = document.getElementById('heroCard');
-            const heroSection = document.querySelector('.hero-card');
-            const imgs = ["images/20241015_153007.jpg","images/20250814_161211.jpg","images/20250825_155937.jpg",];
-            let i=0;
-            function change(){
-                i = (i+1)%imgs.length;
-                
-                const imgTag = heroSection && heroSection.querySelector('img');
-                if(imgTag) imgTag.src = imgs[i];
-            }
-            setInterval(change,5000);
-        })();
+  function rowsFromSheet(sheet) {
+    let rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
+    if(rows.length) return rows;
+    const matrix = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false });
+    if(!matrix.length) return [];
+    const headerIndex = matrix.findIndex(line => line.some(cell => normalizeTextKey(cell).includes("valor")) && line.some(cell => normalizeTextKey(cell).includes("data")));
+    if(headerIndex < 0) return [];
+    const headers = matrix[headerIndex].map((cell, index) => String(cell || `Coluna ${index + 1}`).trim());
+    return matrix.slice(headerIndex + 1)
+      .filter(line => line.some(cell => String(cell || "").trim() !== ""))
+      .map(line => {
+        const obj = {};
+        headers.forEach((header, index) => obj[header] = line[index] ?? "");
+        return obj;
+      });
+  }
 
-        /* ---------- IMAGES DATA (gallery) ---------- */
-        const imagesData = {
-            1: ["images/20250908_153750.jpg"],
-            2: ["images/20241031_153219.jpg"],
-            3: ["images/20241031_153219.jpg"],
-            4: ["images/Alambrado.jpg"],
-            5: ["images/20241031_153219.jpg","images/20250825_155937.jpg","images/20241016_122806.jpg"],
-            6: ["images/20241031_153219.jpg","images/20241031_153219.jpg","images/banner3.jpg","images/banner3.jpg"]
+  function looksLikeLancamentos(rows) {
+    if(!rows.length) return false;
+    const keys = Object.keys(rows[0]).map(normalizeTextKey).join(" ");
+    return keys.includes("data") && keys.includes("valor") && keys.includes("tipo") && (keys.includes("categoria") || keys.includes("descricao"));
+  }
+
+  function recordKey(item, fields) {
+    return fields.map(f => normalizeTextKey(item[f])).join("|");
+  }
+
+  function addUnique(collection, item, fields) {
+    const key = recordKey(item, fields);
+    if(!key.replace(/\|/g, "")) return false;
+    const exists = collection.some(current => recordKey(current, fields) === key);
+    if(exists) return false;
+    collection.push(item);
+    return true;
+  }
+
+  function importLancamentosRows(rows) {
+    const counts = { gastos: 0, pendencias: 0, caixa: 0, obra: 0 };
+    rows.forEach(row => {
+      const tipo = String(getRowValue(row, ["Tipo"]) || "Despesa").trim();
+      const data = normalizeDate(getRowValue(row, ["Data"]));
+      const hora = String(getRowValue(row, ["Hora"]) || "").trim();
+      const remetente = String(getRowValue(row, ["Remetente"]) || "").trim();
+      const valor = parseMoney(getRowValue(row, ["Valor", "Valor original"]));
+      const categoria = String(getRowValue(row, ["Categoria"]) || "Outros").trim() || "Outros";
+      const obraCliente = String(getRowValue(row, ["Obra/Cliente", "Obra Cliente", "Cliente"]) || "").trim();
+      const descricao = String(getRowValue(row, ["Descricao", "Descrição", "Mensagem completa"]) || "").trim();
+      const obsBase = [
+        obraCliente ? `Obra/Cliente: ${obraCliente}` : "",
+        hora ? `Hora: ${hora}` : "",
+        remetente ? `Remetente: ${remetente}` : ""
+      ].filter(Boolean).join(" | ");
+
+      if(normalizeTextKey(tipo).includes("caixa")) {
+        const caixaItem = { data, hora, remetente, tipo, valor, descricao, saldo: valor, origem: "Planilha WhatsApp" };
+        if(addUnique(db.caixa, caixaItem, ["data", "hora", "tipo", "valor", "descricao"])) counts.caixa++;
+        return;
+      }
+
+      if(normalizeTextKey(tipo).includes("pendencia")) {
+        const pendencia = { data, hora, remetente, categoria, obraCliente, valor, descricao, obs: obsBase, origem: "Planilha WhatsApp" };
+        if(addUnique(db.pendencias, pendencia, ["data", "hora", "valor", "descricao"])) counts.pendencias++;
+        return;
+      }
+
+      const gasto = { data, categoria, descricao, valor, obs: obsBase, obraCliente, remetente, hora, origem: "Planilha WhatsApp" };
+      if(addUnique(db.gastos, gasto, ["data", "categoria", "valor", "descricao"])) counts.gastos++;
+
+      if(obraCliente) {
+        const obraItem = {
+          cliente: obraCliente,
+          servico: categoria || "Importado da planilha",
+          veiculo: "",
+          motorista: "",
+          responsavel: remetente,
+          status: "Em Andamento",
+          data
         };
+        if(addUnique(db.obra, obraItem, ["cliente"])) counts.obra++;
+      }
+    });
+    return counts;
+  }
 
-        function showImages(id){
-            const container = document.getElementById('imagesContainer');
-            const gallery = document.getElementById('imagesGallery');
-            gallery.innerHTML = '';
-            const arr = imagesData[id] || [];
-            if(arr.length === 0){
-                gallery.innerHTML = '<div style="color:white;font-weight:700;">Sem imagens para esta categoria no momento.</div>';
-            } else {
-                arr.forEach(src=>{
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = "Foto do serviço";
-                    img.loading = "lazy";
-                    gallery.appendChild(img);
-                });
-            }
-            container.style.display = 'flex';
-            container.setAttribute('aria-hidden','false');
-            document.body.style.overflow = 'hidden';
+  function importGastosRows(rows) {
+    let added = 0;
+    rows.forEach(row => {
+      const gasto = {
+        data: normalizeDate(getRowValue(row, ["data", "Data"])),
+        categoria: String(getRowValue(row, ["categoria", "Categoria"]) || "Outros").trim() || "Outros",
+        descricao: String(getRowValue(row, ["descricao", "Descrição", "Descricao"]) || "").trim(),
+        valor: parseMoney(getRowValue(row, ["valor", "Valor"])),
+        obs: String(getRowValue(row, ["obs", "Observacoes", "Observações"]) || "").trim(),
+        origem: String(getRowValue(row, ["origem", "Origem"]) || "Planilha importada").trim()
+      };
+      if(addUnique(db.gastos, gasto, ["data", "categoria", "valor", "descricao", "obs"])) added++;
+    });
+    return added;
+  }
+
+  function importObrasRows(rows) {
+    let added = 0;
+    rows.forEach(row => {
+      const obra = {
+        cliente: String(getRowValue(row, ["cliente", "Cliente"]) || "").trim(),
+        servico: String(getRowValue(row, ["servico", "Serviço", "Servico"]) || "").trim(),
+        veiculo: String(getRowValue(row, ["veiculo", "Veículo"]) || "").trim(),
+        motorista: String(getRowValue(row, ["motorista", "Motorista"]) || "").trim(),
+        responsavel: String(getRowValue(row, ["responsavel", "Responsável"]) || "").trim(),
+        status: String(getRowValue(row, ["status", "Status"]) || "Em Andamento").trim(),
+        data: normalizeDate(getRowValue(row, ["data", "Data"])),
+        origem: String(getRowValue(row, ["origem", "Origem"]) || "Planilha importada").trim()
+      };
+      if(addUnique(db.obra, obra, ["cliente", "servico", "data"])) added++;
+    });
+    return added;
+  }
+
+  function importPixRows(rows) {
+    let added = 0;
+    rows.forEach(row => {
+      const pixItem = {
+        nome: String(getRowValue(row, ["nome", "Nome"]) || "").trim(),
+        pix: String(getRowValue(row, ["pix", "Chave PIX"]) || "").trim(),
+        instituicao: String(getRowValue(row, ["instituicao", "Instituição", "Instituicao"]) || "").trim(),
+        origem: String(getRowValue(row, ["origem", "Origem"]) || "Planilha importada").trim()
+      };
+      if(addUnique(db.pix, pixItem, ["nome", "pix", "instituicao"])) added++;
+    });
+    return added;
+  }
+
+  function importFaltasRows(rows) {
+    let added = 0;
+    rows.forEach(row => {
+      const falta = {
+        nome: String(getRowValue(row, ["nome", "Nome"]) || "").trim(),
+        cargo: String(getRowValue(row, ["cargo", "Cargo"]) || "").trim(),
+        data: normalizeDate(getRowValue(row, ["data", "Data"])),
+        origem: String(getRowValue(row, ["origem", "Origem"]) || "Planilha importada").trim()
+      };
+      if(addUnique(db.faltas, falta, ["nome", "cargo", "data"])) added++;
+    });
+    return added;
+  }
+
+  function importDasRows(rows) {
+    let added = 0;
+    rows.forEach(row => {
+      const dasItem = {
+        nomeColab: String(getRowValue(row, ["nomeColab", "Nome"]) || "").trim(),
+        contaGov: String(getRowValue(row, ["contaGov", "Conta Gov.br"]) || "").trim(),
+        meiStatus: String(getRowValue(row, ["meiStatus", "MEI Status"]) || "").trim(),
+        cnpj: String(getRowValue(row, ["cnpj", "CNPJ"]) || "").trim(),
+        pagamentoStatus: String(getRowValue(row, ["pagamentoStatus", "Pagamento Status"]) || "").trim(),
+        statusGeral: String(getRowValue(row, ["statusGeral", "STATUS"]) || "").trim()
+      };
+      if(addUnique(db.das, dasItem, ["nomeColab", "cnpj", "pagamentoStatus"])) added++;
+    });
+    return added;
+  }
+
+  function mergeSimpleSheet(sheetName, rows) {
+    const lowerName = normalizeTextKey(sheetName);
+    if(lowerName.includes("gasto")) return importGastosRows(rows);
+    if(lowerName.includes("obra")) return importObrasRows(rows);
+    if(lowerName.includes("pix")) return importPixRows(rows);
+    if(lowerName.includes("falta")) return importFaltasRows(rows);
+    if(lowerName.includes("das")) return importDasRows(rows);
+    if(lowerName.includes("pendencia")) {
+      let added = 0;
+      rows.forEach(row => {
+        const item = {
+          data: normalizeDate(getRowValue(row, ["data", "Data"])),
+          hora: String(getRowValue(row, ["hora", "Hora"]) || "").trim(),
+          remetente: String(getRowValue(row, ["remetente", "Remetente"]) || "").trim(),
+          categoria: String(getRowValue(row, ["categoria", "Categoria"]) || "Outros").trim(),
+          obraCliente: String(getRowValue(row, ["obraCliente", "Obra/Cliente"]) || "").trim(),
+          valor: parseMoney(getRowValue(row, ["valor", "Valor"])),
+          descricao: String(getRowValue(row, ["descricao", "Descricao", "Descrição"]) || "").trim(),
+          obs: String(getRowValue(row, ["obs", "Obs"]) || "").trim()
+        };
+        if(addUnique(db.pendencias, item, ["data", "valor", "descricao"])) added++;
+      });
+      return added;
+    }
+    if(lowerName.includes("caixa")) {
+      let added = 0;
+      rows.forEach(row => {
+        const item = {
+          data: normalizeDate(getRowValue(row, ["data", "Data"])),
+          hora: String(getRowValue(row, ["hora", "Hora"]) || "").trim(),
+          remetente: String(getRowValue(row, ["remetente", "Remetente"]) || "").trim(),
+          tipo: String(getRowValue(row, ["tipo", "Tipo"]) || "Caixa").trim(),
+          valor: parseMoney(getRowValue(row, ["valor", "Valor"])),
+          descricao: String(getRowValue(row, ["descricao", "Descricao", "Descrição"]) || "").trim(),
+          saldo: parseMoney(getRowValue(row, ["saldo", "Saldo", "valor", "Valor"]))
+        };
+        if(addUnique(db.caixa, item, ["data", "hora", "tipo", "valor", "descricao"])) added++;
+      });
+      return added;
+    }
+    return 0;
+  }
+
+  function importExcel(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array', cellDates: true });
+      const totals = { gastos: 0, obra: 0, pix: 0, faltas: 0, das: 0, pendencias: 0, caixa: 0 };
+      const sheetReport = [];
+
+      wb.SheetNames.forEach(name => {
+        const rows = rowsFromSheet(wb.Sheets[name]);
+        const lowerName = normalizeTextKey(name);
+        sheetReport.push(`${name}: ${rows.length} linhas`);
+        if(lowerName.includes("resumo") || lowerName === "info" || lowerName.startsWith("por ")) return;
+        if(lowerName.includes("lancamento") || lowerName.includes("lancamentos") || looksLikeLancamentos(rows)) {
+          const imported = importLancamentosRows(rows);
+          Object.keys(imported).forEach(k => totals[k] += imported[k]);
+        } else {
+          const added = mergeSimpleSheet(name, rows);
+          const targetName = lowerName.includes("gasto") ? "gastos"
+            : lowerName.includes("obra") ? "obra"
+            : lowerName.includes("pix") ? "pix"
+            : lowerName.includes("falta") ? "faltas"
+            : lowerName.includes("das") ? "das"
+            : lowerName.includes("pendencia") ? "pendencias"
+            : lowerName.includes("caixa") ? "caixa" : null;
+          if(targetName) totals[targetName] += added;
         }
-        function hideImages(){
-            const container = document.getElementById('imagesContainer');
-            container.style.display = 'none';
-            container.setAttribute('aria-hidden','true');
-            document.body.style.overflow = '';
+      });
+
+      console.log("Vitaser importacao", totals, sheetReport, db);
+      sortCollections();
+      save();
+      renderAll();
+      const totalImported = Object.values(totals).reduce((a,b)=>a+b,0);
+      const diagnostic = totalImported ? "" : `\n\nNenhum item foi importado. Abas lidas:\n${sheetReport.join("\n")}`;
+      alert(`Importacao concluida sem apagar dados existentes.\n\nGastos: ${totals.gastos}\nObras novas: ${totals.obra}\nPendencias: ${totals.pendencias}\nCaixa: ${totals.caixa}\nPIX: ${totals.pix}\nFaltas: ${totals.faltas}\nDAS: ${totals.das}${diagnostic}`);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+  
+  // Eventos - configurados uma única vez fora do renderAll
+  function setupEvents() {
+    const btnAdd = document.getElementById("btnAdd");
+    const btnExport = document.getElementById("btnExport");
+    const btnDeleteAll = document.getElementById("btnDeleteAll");
+    const btnImport = document.getElementById("btnImport");
+    const fileUpload = document.getElementById("fileUploadExcel");
+    
+    if(btnAdd) btnAdd.onclick = addRecord;
+    if(btnExport) btnExport.onclick = exportExcel;
+    if(btnDeleteAll) btnDeleteAll.onclick = deleteAll;
+    if(btnImport) btnImport.onclick = () => fileUpload.click();
+    if(fileUpload) fileUpload.onchange = (e) => {
+      if(e.target.files[0]) importExcel(e.target.files[0]);
+      e.target.value = '';
+    };
+    
+    const searchInput = document.getElementById("liveSearchInput");
+    if(searchInput) {
+      searchInput.oninput = (e) => {
+        liveSearchTerm = e.target.value;
+        renderTable();
+        updateFilterBadge();
+      };
+    }
+    
+    const dateFilter = document.getElementById("liveDateFilter");
+    if(dateFilter) {
+      dateFilter.onchange = (e) => {
+        liveDateFilter = e.target.value;
+        renderTable();
+        updateFilterBadge();
+      };
+    }
+    
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    if(clearSearchBtn) {
+      clearSearchBtn.onclick = () => {
+        liveSearchTerm = "";
+        if(searchInput) searchInput.value = "";
+        renderTable();
+        updateFilterBadge();
+      };
+    }
+    
+    const clearDateBtn = document.getElementById("clearDateBtn");
+    if(clearDateBtn) {
+      clearDateBtn.onclick = () => {
+        liveDateFilter = "";
+        if(dateFilter) dateFilter.value = "";
+        renderTable();
+        updateFilterBadge();
+      };
+    }
+    
+    const menuBtn = document.getElementById("menuButton");
+    const dropdown = document.getElementById("dropdownMenu");
+    if(menuBtn && dropdown) {
+      menuBtn.onclick = (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("show");
+      };
+      document.addEventListener("click", (e) => {
+        if(!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove("show");
         }
-
-        /* ---------- LEAD FORM: send via WhatsApp (ajustado para o novo botão) ---------- */
-        function sendLead(){
-            const nome = document.getElementById('nome').value.trim();
-            const telefone = document.getElementById('telefone').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const mensagem = document.getElementById('mensagem').value.trim();
-
-            const note = document.getElementById('formNote');
-
-            if(!nome || !telefone || !mensagem){
-                note.style.color = '#b00020';
-                note.textContent = 'Preencha Nome, Telefone/WhatsApp e a Descrição do Serviço.';
-                return;
-            }
-
-            // build message:
-            let texto = `*SOLICITAÇÃO DE ORÇAMENTO DenverBrasil*\n\n*Nome:* ${nome}\n*Telefone/WhatsApp:* ${telefone}`;
-            if(email) texto += `\n*E-mail:* ${email}`;
-            texto += `\n\n*Descrição do Serviço:*\n${mensagem}`;
-
-            const numeroWhatsApp = '5531986985930';
-            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
-            // open in new tab
-            window.open(url,'_blank');
-
-            // Feedback quick:
-            note.style.color = 'green';
-            note.textContent = 'Abrindo WhatsApp... Aguarde e confirme o envio.';
-            setTimeout(()=>{ note.textContent = 'Envie o formulário para abrir o WhatsApp automaticamente.' }, 6000);
-        }
-
-        /* ---------- quick-call (não mais necessário como função separada, mas mantida) ---------- */
-        function callPhone(){
-            window.location.href = 'tel:+5531986985930';
-        }
-
-        /* ---------- keyboard accessibility for cards (Enter) ---------- */
-        document.addEventListener('keydown', (e)=>{
-            if(e.key === 'Escape') hideImages();
-            if(e.key === 'Enter'){
-                const active = document.activeElement;
-                if(active && active.classList.contains('card')) active.click();
-            }
-        });
-
-        /* ---------- small UX polish: smooth scroll for anchor links (fix) ---------- */
-        document.querySelectorAll('a[href^="#"]').forEach(a=>{
-            a.addEventListener('click',(ev)=>{
-                const href = a.getAttribute('href');
-                if(href.length>1){
-                    const el = document.querySelector(href);
-                    if(el){ ev.preventDefault(); el.scrollIntoView({behavior:'smooth',block:'start'}); }
-                }
-            });
-        });
-    </script>
+      });
+    }
+  }
+  
+  loadFromStorage();
+  setupEvents();
+  renderAll();
+</script>
 </body>
 </html>
